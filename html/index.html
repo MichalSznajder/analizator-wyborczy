@@ -54,9 +54,13 @@
         }).addTo(mymap);
 
 
-        $.getJSON("districts.json", function(json) {
+        $.getJSON("districts2.json", function(json) {
             L.geoJSON(json).addTo(mymap);
         });
+        $.getJSON("districtsx.json", function(json) {
+            L.geoJSON(json).addTo(mymap);
+        });
+
     </script>
 </body>
 </html>

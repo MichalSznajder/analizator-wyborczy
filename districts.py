@@ -3,6 +3,7 @@
 
 import json
 from pprint import pprint
+from scipy.spatial import ConvexHull
 
 def get_streets_coord():
     raw_data = json.load(open('only-wro-only-names.geojson'))
@@ -48,7 +49,6 @@ districts_json['type'] = 'FeatureCollection',
 districts_json['features'] = []
 districts_features = districts_json['features'];
 
-
 for street_name in district_streets:
     if not street_name in streets:
         raise Exception('Street not found ', street_name)
@@ -56,12 +56,45 @@ for street_name in district_streets:
     feature = {}
     feature['type'] = 'Feature'
     feature['geometry'] = {}
+    
     feature['geometry']['type'] = 'MultiPoint'
     feature['geometry']['coordinates'] = streets[street_name]
-    districts_features.append(feature)
 
+    districts_features.append(feature)
 
 json_data = json.dumps(districts_json)
 with open('html/districts.json', 'w') as file:
     file.write(json_data)
+
+districts2_json = {}
+
+districts2_json['type'] = 'FeatureCollection',
+districts2_json['features'] = []
+districts2_features = districts2_json['features'];
+
+hull_points = []
+for street_name in district_streets:
+    if not street_name in streets:
+        raise Exception('Street not found ', street_name)
+
+    for x in streets[street_name]:
+        hull_points.append(x)
+
+feature = {}
+    
+hull = ConvexHull(hull_points)
+feature['type'] = 'Polygon'
+hull_result = []
+for v in hull.vertices:
+    hull_result.append(hull_points[v])
+hull_result.append(hull_result[0])
+feature['coordinates'] = []
+feature['coordinates'].append(hull_result)
+
+districts2_features.append(feature)
+
+json_data = json.dumps(feature)
+with open('html/districts2.json', 'w') as file:
+    file.write(json_data)
+
 

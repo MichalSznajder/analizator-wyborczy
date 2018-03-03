@@ -24,7 +24,7 @@ def get_streets_coord():
 streets = get_streets_coord()
 
 
-district = [
+district_streets = [
     u'Bożego Ciała', 
     u'Kazimierza Wielkiego', 
     u'Księdza Piotra Skargi', 
@@ -42,9 +42,26 @@ district = [
     u'Widok', 
     u'Wierzbowa']
 
+districts_json = {}
 
-for d in district:
-    if not d in streets:
-        raise Exception('Street not found ', d)
+districts_json['type'] = 'FeatureCollection',
+districts_json['features'] = []
+districts_features = districts_json['features'];
 
-pprint(streets)
+
+for street_name in district_streets:
+    if not street_name in streets:
+        raise Exception('Street not found ', street_name)
+
+    feature = {}
+    feature['type'] = 'Feature'
+    feature['geometry'] = {}
+    feature['geometry']['type'] = 'MultiPoint'
+    feature['geometry']['coordinates'] = streets[street_name]
+    districts_features.append(feature)
+
+
+json_data = json.dumps(districts_json)
+with open('html/districts.json', 'w') as file:
+    file.write(json_data)
+

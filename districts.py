@@ -19,7 +19,14 @@ def get_streets_coord():
             streets[street_name] = []
 
         for c in coords:
-            streets[street_name].append(c)
+            x = c[0] # 16
+            y = c[1] # 51 
+
+            # 51.141357, 16.993146 NW
+            # 51.075410, 17.108309 SE
+            if 16.993146 < x < 17.108309:
+                if 51.075410 < y < 51.141357:   
+                    streets[street_name].append(c)
     return streets
 
 streets = get_streets_coord()

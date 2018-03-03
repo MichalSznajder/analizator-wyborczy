@@ -55,6 +55,13 @@ def create_district_points(streets):
 
 
 def create_district_hulls(streets):
+
+    districts_json = {}
+
+    districts_json['type'] = 'FeatureCollection',
+    districts_json['features'] = []
+    districts_features = districts_json['features'];
+
     hull_points = []
     for street_name in district_streets:
         if not street_name in streets:
@@ -64,18 +71,21 @@ def create_district_hulls(streets):
             hull_points.append(x)
 
     feature = {}
-        
+    feature['type'] = 'Feature'
+    feature['geometry'] = {}    
+    
     hull = ConvexHull(hull_points)
-    feature['type'] = 'Polygon'
+    feature['geometry']['type'] = 'Polygon'
     hull_result = []
     for v in hull.vertices:
         hull_result.append(hull_points[v])
     hull_result.append(hull_result[0])
-    feature['coordinates'] = []
-    feature['coordinates'].append(hull_result)
+    feature['geometry']['coordinates'] = []
+    feature['geometry']['coordinates'].append(hull_result)
 
+    districts_features.append(feature)
 
-    json_data = json.dumps(feature)
+    json_data = json.dumps(districts_json)
     with open('html/districts2.json', 'w') as file:
         file.write(json_data)
 

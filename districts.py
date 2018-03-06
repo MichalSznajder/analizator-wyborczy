@@ -6,6 +6,7 @@ import urllib2
 from pprint import pprint
 from scipy.spatial import ConvexHull
 from bs4 import BeautifulSoup
+import re
 
 def get_streets_coord():
     raw_data = json.load(open('only-wro-only-names.geojson'))
@@ -141,9 +142,6 @@ district_streets2 = [
 
 
 
-class RawDistrictData(object):
-    streets = ""
-
 def get_raw_districts_list():
     response = urllib2.urlopen('http://wybory2011.pkw.gov.pl/geo/020000/pl/026401.html')
     html = response.read()
@@ -152,13 +150,71 @@ def get_raw_districts_list():
 
     districts = []
     for row in tbody.find_all('tr')[2:]:
-        raw_data = RawDistrictData()
+        raw_data = {}
         cells = row.find_all('td')
-        raw_data.streets = cells[5].string
+        raw_data['number'] = cells[0].string
+        raw_data['address'] = cells[1].string
+        raw_data['streets'] = cells[5].string
+        raw_data['gmap_link'] = cells[6].a['href']
         districts.append(raw_data)
        
     return districts
 
-raw_distrcits = get_raw_districts_list()
 
-pprint(raw_distrcits)
+def split_compound_street_name(street_name):
+    streets = [street.strip() for street in street_name.split(',')]
+
+    ret = []
+    last_street = ""
+    for street in streets:
+        is_broken_street = street[0].isnumeric()
+
+        if is_broken_street:
+            ret.append(last_street + ' ' + street)
+        else:
+            ret.append(street)
+
+        if not is_broken_street:
+            last_street = [s for s in street.split()]
+            last_street = filter(lambda x: not x[0].isnumeric(), last_street)
+            last_street = filter(lambda x: not x == u'parzyste', last_street)
+            last_street = filter(lambda x: not x == u'nieparzyste', last_street)
+            last_street = u' '.join(last_street)
+
+    return ret
+
+
+numbers_regex = re.compile('(\d+)-(\d+)')
+
+def generate_unique_address_points(streets):
+    for street in streets:
+        split = numbers_regex.split(street)
+        split_len = len(split)
+
+        if split_len == 1:
+            yield street
+        elif split_len == 4:
+            step = 1 if split[3] == u'' else 2
+
+            street_name = split[0]
+            start = int(split[1])
+            end = int(split[2])
+
+            for point in range(start, end, step):
+                yield street_name + str(point)
+        else:
+            raise Exception('unknown split for ' + street)
+
+#raw_districts = get_raw_districts_list()
+#with open('data/districts.json', 'w') as outfile:
+#    json.dump(raw_districts, outfile, indent=4)
+raw_districts = json.load(open('data/districts.json'))
+
+for item in raw_districts:
+    item['streets'] = split_compound_street_name(item['streets'])
+    item['streets'] = list(generate_unique_address_points(item['streets'])
+
+with open('data/districtsX.json', 'w') as outfile:
+    json.dump(raw_districts, outfile, indent=4)
+
+

@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import json
-import urllib2
+import urllib2, urllib
 from pprint import pprint
 from scipy.spatial import ConvexHull
 from bs4 import BeautifulSoup
 import re
+import time
 
 def get_streets_coord():
     raw_data = json.load(open('only-wro-only-names.geojson'))
@@ -205,14 +206,43 @@ def generate_unique_address_points(streets):
         else:
             raise Exception('unknown split for ' + street)
 
+def perform_geocode(street):
+    # https://wiki.openstreetmap.org/wiki/Nominatim
+    query_params = {}
+    query_params['format'] = 'json'
+    query_params['street'] = street.encode("utf-8")
+    query_params['city'] = u'Wrocław'.encode("utf-8")
+    query_params['country'] = 'Polska'
+    query_params['viewbox'] = '16.70609,51.22611,17.53831,51.01061'
+    query_params['bouded'] = '1'
+    query_params['polygon_geojson'] = '1'
+
+    query = urllib.urlencode(query_params)
+    url = 'https://nominatim.openstreetmap.org/search?' + query
+    response = urllib2.urlopen(url)
+    json_data = response.read()
+    json_data = json.loads(json_data)
+
+    pprint(url)
+
+    ret = {}
+    ret['name'] = street
+    ret['coords'] = [c for bbox in json_data for c in bbox['geojson']['coordinates']]
+
+    time.sleep(0.5)
+
+    return ret
+
 #raw_districts = get_raw_districts_list()
 #with open('data/districts.json', 'w') as outfile:
 #    json.dump(raw_districts, outfile, indent=4)
 raw_districts = json.load(open('data/districts.json'))
 
-for item in raw_districts:
+for item in raw_districts[1:2]:
     item['streets'] = split_compound_street_name(item['streets'])
-    item['streets'] = list(generate_unique_address_points(item['streets'])
+    item['streets'] = list(generate_unique_address_points(item['streets']))
+    item['streets'] = [perform_geocode(s) for s in item['streets']]
+
 
 with open('data/districtsX.json', 'w') as outfile:
     json.dump(raw_districts, outfile, indent=4)

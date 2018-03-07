@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import json
+from pprint import pprint
+from scipy.spatial import ConvexHull
+
 def create_district_points(streets):
     districts_json = {}
 
@@ -42,7 +46,7 @@ def get_json_hull_for_points(points):
     
     return feature
 
-def create_district_hulls2(raw_districts):
+def create_district_hulls(raw_districts):
 
     districts_json = {}
 
@@ -59,6 +63,5 @@ def create_district_hulls2(raw_districts):
         file.write(json_data)
 
 
-#geocoded_streets = json.load(open('data/districtsX.json'))
-
-create_district_hulls2(raw_districts)
+raw_districts = json.load(open('data/districts.json'))
+create_district_hulls(raw_districts)

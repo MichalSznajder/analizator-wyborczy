@@ -9,7 +9,6 @@ from bs4 import BeautifulSoup
 import re
 import time
 
-
 def get_raw_districts_list():
     """ Download list of election districts from 2014 elections.
     """

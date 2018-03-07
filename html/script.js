@@ -21,6 +21,22 @@ $.getJSON("election_results.json", function(json) {
 });
 
 
-$.getJSON("address_points.json", function(json) {
-    L.geoJSON(json, { onEachFeature : onEachFeature }).addTo(mymap);
+var address_points_layer = null;
+
+$(function() {
+    $("#toogle_address_points").click( function()
+         {
+            if (address_points_layer === null)
+            {
+                $.getJSON("address_points.json", function(json) {
+                    address_points_layer = L.geoJSON(json, { onEachFeature : onEachFeature }).addTo(mymap);
+                });                           
+            } 
+            else
+            {
+                address_points_layer.remove();
+                address_points_layer = null;
+            }
+         }
+    );
 });

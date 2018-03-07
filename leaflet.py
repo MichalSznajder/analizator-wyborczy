@@ -58,10 +58,40 @@ def create_district_hulls(raw_districts):
     feature = get_json_hull_for_points(hull_points)
     districts_features.append(feature)
 
-    json_data = json.dumps(districts_json)
-    with open('html/districts2.json', 'w') as file:
-        file.write(json_data)
+    return districts_json
+
+def create_address_points(raw_districts):
+
+    districts_json = {}
+
+    districts_json['type'] = 'FeatureCollection',
+    districts_json['features'] = []
+    districts_features = districts_json['features'];
+
+    points = [(c, coords['name']) for item in raw_districts for coords in item['coords'] for c in coords['coords']]
+    
+    for point in points:
+        feature = {}
+        feature['type'] = 'Feature'
+        feature['geometry'] = {}    
+        feature['geometry']['type'] = 'Point'
+        feature['geometry']['coordinates'] = point[0]
+        feature['properties'] = {} 
+        feature['properties']['street_name'] = point[1]
+        districts_features.append(feature)
+
+    return districts_json
 
 
 raw_districts = json.load(open('data/districts.json'))
-create_district_hulls(raw_districts)
+districts_json = create_district_hulls(raw_districts)
+json_data = json.dumps(districts_json, indent=4)
+with open('html/election_results.json', 'w') as file:
+    file.write(json_data)
+
+address_points = create_address_points(raw_districts)
+json_data = json.dumps(address_points, indent=4)
+with open('html/address_points.json', 'w') as file:
+    file.write(json_data)
+
+

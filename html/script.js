@@ -8,9 +8,19 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=p
 }).addTo(mymap);
 
 
-$.getJSON("districts2.json", function(json) {
+function onEachFeature(feature, layer) {
+    if (feature.properties && feature.properties.street_name) {
+        layer.bindPopup(feature.properties.street_name);
+    }
+}
+
+
+
+$.getJSON("election_results.json", function(json) {
     L.geoJSON(json).addTo(mymap);
 });
-$.getJSON("district.json", function(json) {
-    L.geoJSON(json).addTo(mymap);
+
+
+$.getJSON("address_points.json", function(json) {
+    L.geoJSON(json, { onEachFeature : onEachFeature }).addTo(mymap);
 });

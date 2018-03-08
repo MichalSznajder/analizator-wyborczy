@@ -8,6 +8,24 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=p
 }).addTo(mymap);
 
 
+function highlightDistrict(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 5,
+        color: '#666',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
+}
+
+function resetDistrictHighlight(e) {
+    election_results.resetStyle(e.target);
+}
 
 function onDistrictClick(e) {
     $('#district_address').text(e.target.feature.properties.address);
@@ -16,30 +34,28 @@ function onDistrictClick(e) {
 function onEachFeatureInResults(feature, layer) {
     if (feature.properties && feature.properties.address) {
         layer.on({
-            click: onDistrictClick
+            click: onDistrictClick,
+            mouseover: highlightDistrict,
+            mouseout: resetDistrictHighlight
         })
     }
 }
 
+var election_results
+
 $.getJSON("election_results.json", function(json) {
-    L.geoJSON(json, 
+    election_results = L.geoJSON(json, 
         { 
             onEachFeature : onEachFeatureInResults 
-        })
-        .addTo(mymap);
+        });
+    election_results.addTo(mymap);
 });
-
-
 
 function onEachFeature(feature, layer) {
     if (feature.properties && feature.properties.street_name) {
         layer.bindPopup(feature.properties.street_name);
     }
 }
-
-
-
-
 
 var address_points_layer = null;
 

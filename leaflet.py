@@ -30,22 +30,19 @@ def create_district_points(streets):
         file.write(json_data)
 
 
-def get_json_hull_for_points(points):
-    feature = {}
-    feature['type'] = 'Feature'
-    feature['properties'] = {} 
-    feature['geometry'] = {}    
+def get_geometry_hull_for_points(points):
+    geometry = {}    
     
     hull = ConvexHull(points)
-    feature['geometry']['type'] = 'Polygon'
+    geometry['type'] = 'Polygon'
     hull_result = []
     for v in hull.vertices:
         hull_result.append(points[v])
     hull_result.append(hull_result[0])
-    feature['geometry']['coordinates'] = []
-    feature['geometry']['coordinates'].append(hull_result)
+    geometry['coordinates'] = []
+    geometry['coordinates'].append(hull_result)
     
-    return feature
+    return geometry
 
 def create_district_hulls(districts):
     districts_json = {}
@@ -55,8 +52,14 @@ def create_district_hulls(districts):
     districts_features = districts_json['features'];
 
     for district_data in districts:
+        pprint('creating for ' + district_data['address'])
         hull_points = [c for coords in district_data['coords'] for c in coords['coords']]
-        feature = get_json_hull_for_points(hull_points)
+
+        feature = {}
+        feature['type'] = 'Feature'
+        feature['properties'] = {'address' : district_data['address'] } 
+        feature['geometry'] = get_geometry_hull_for_points(hull_points)    
+
         districts_features.append(feature)
 
     return districts_json

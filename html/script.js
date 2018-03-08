@@ -8,6 +8,29 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=p
 }).addTo(mymap);
 
 
+
+function onDistrictClick(e) {
+    $('#district_address').text(e.target.feature.properties.address);
+}
+
+function onEachFeatureInResults(feature, layer) {
+    if (feature.properties && feature.properties.address) {
+        layer.on({
+            click: onDistrictClick
+        })
+    }
+}
+
+$.getJSON("election_results.json", function(json) {
+    L.geoJSON(json, 
+        { 
+            onEachFeature : onEachFeatureInResults 
+        })
+        .addTo(mymap);
+});
+
+
+
 function onEachFeature(feature, layer) {
     if (feature.properties && feature.properties.street_name) {
         layer.bindPopup(feature.properties.street_name);
@@ -16,9 +39,6 @@ function onEachFeature(feature, layer) {
 
 
 
-$.getJSON("election_results.json", function(json) {
-    L.geoJSON(json).addTo(mymap);
-});
 
 
 var address_points_layer = null;

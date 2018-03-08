@@ -72,7 +72,7 @@ def generate_unique_address_points(streets):
         split_len = len(split)
 
         if split_len == 1:
-            yield street
+            yield ("street", street)
         elif split_len == 4:
             step = 1 if split[3] == u'' else 2
 
@@ -81,7 +81,7 @@ def generate_unique_address_points(streets):
             end = int(split[2])
 
             for point in range(start, end, step):
-                yield street_name + str(point)
+                yield ("point", street_name + str(point))
         else:
             raise Exception('unknown split for ' + street)
 
@@ -94,13 +94,16 @@ def perform_geocode(street):
     # https://wiki.openstreetmap.org/wiki/Nominatim
     query_params = {}
     query_params['format'] = 'json'
-    query_params['street'] = street.encode("utf-8")
+    query_params['street'] = street[1].encode("utf-8")
     query_params['city'] = u'Wrocław'.encode("utf-8")
     query_params['country'] = 'Polska'
     query_params['viewbox'] = '16.70609,51.22611,17.53831,51.01061'
     query_params['bouded'] = '1'
     query_params['polygon_geojson'] = '1'
-    query_params['limit'] = '1'
+
+    # for streets take best match, points should return only one match anyway
+    if street[0] == "street":
+        query_params['limit'] = '1'
 
     query = urllib.urlencode(query_params)
     url = 'https://nominatim.openstreetmap.org/search?' + query
@@ -110,8 +113,13 @@ def perform_geocode(street):
 
     pprint(query)
 
+    # if point (eg. "Kotlarska 3") results in more than one match
+    # then it is probably invalid point
+    if  street[1] == "point" and len(json_data) > 1:
+        return {}
+
     ret = {}
-    ret['name'] = street
+    ret['name'] = street[1]
     ret['coords'] = []
     for bbox in json_data:
         if bbox['geojson']['type'] == 'Point':
@@ -127,19 +135,23 @@ def perform_geocode(street):
 
     return ret
 
-raw_districts = get_raw_districts_list()
-with open('data/raw_districts.json', 'w') as outfile:
-    json.dump(raw_districts, outfile, indent=4)
-# raw_districts = json.load(open('data/districts.json'))
+if False:
+    raw_districts = get_raw_districts_list()
+    with open('data/raw_districts.json', 'w') as outfile:
+        json.dump(raw_districts, outfile, indent=4)
+else:
+    raw_districts = json.load(open('data/raw_districts.json'))
 
 def parse_streets(data):
+    pprint('geocoding for ' + data['address'])
     split = split_compound_street_name(data['streets'])
-    data['addr_points'] = list(generate_unique_address_points(split))
-    data['coords'] = [perform_geocode(s) for s in data['addr_points']]
+    addr_points = list(generate_unique_address_points(split))
+    data['addr_points'] = [p[1] for p in addr_points]
+    data['coords'] = [perform_geocode(s) for s in addr_points]
     
     return data
 
-districts = [parse_streets(d) for d in raw_districts[1:2]]
+districts = [parse_streets(d) for d in raw_districts[0:3+1]]
 
 with open('data/districts.json', 'w') as outfile:
     json.dump(districts, outfile, indent=4)

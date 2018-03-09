@@ -27,8 +27,11 @@ function resetDistrictHighlight(e) {
     election_results.resetStyle(e.target);
 }
 
+var selectedDistrictNumber = -1;
+
 function onDistrictClick(e) {
     $('#district_address').text(e.target.feature.properties.address);
+    selectedDistrictNumber = e.target.feature.properties.number;
 }
 
 function onEachFeatureInResults(feature, layer) {
@@ -60,19 +63,29 @@ function onEachFeature(feature, layer) {
 var address_points_layer = null;
 
 $(function() {
-    $("#toogle_address_points").click( function()
-         {
-            if (address_points_layer === null)
-            {
-                $.getJSON("address_points.json", function(json) {
-                    address_points_layer = L.geoJSON(json, { onEachFeature : onEachFeature }).addTo(mymap);
-                });                           
-            } 
-            else
-            {
-                address_points_layer.remove();
-                address_points_layer = null;
-            }
-         }
-    );
+    $("#show_address_points").click( function() {
+        if (selectedDistrictNumber === -1)
+        {
+            return;
+        }
+
+        if (address_points_layer !== null)
+        {
+            address_points_layer.remove();
+            address_points_layer = null;
+        } 
+
+        $.getJSON("address_points_" + selectedDistrictNumber + ".json", function(json) {
+            address_points_layer = L.geoJSON(json, { onEachFeature : onEachFeature }).addTo(mymap);
+        });                           
+    });
+
+    $("#hide_address_points").click( function() {
+        if (address_points_layer !== null)
+        {
+            address_points_layer.remove();
+            address_points_layer = null;
+        } 
+    });                           
+
 });

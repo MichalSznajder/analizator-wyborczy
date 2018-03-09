@@ -31,6 +31,7 @@ var selectedDistrictNumber = -1;
 
 function onDistrictClick(e) {
     $('#district_address').text(e.target.feature.properties.address);
+    $('#district_number').text("Numer obwodu: " + e.target.feature.properties.number);
     selectedDistrictNumber = e.target.feature.properties.number;
 }
 

@@ -8,6 +8,7 @@ from scipy.spatial import ConvexHull
 from bs4 import BeautifulSoup
 import re
 import time
+import codecs
 
 def get_raw_districts_list():
     """ Download list of election districts from 2014 elections.
@@ -135,12 +136,45 @@ def perform_geocode(street):
 
     return ret
 
+
+#
+# based on https://www.wroclaw.pl/files/wybory_prezydenckie_2015/obwody-okw.pdf
+#
+def get_raw_districts_list_2015():
+    districts = []
+    
+    lines = codecs.open('data/raw_districts_2015.txt', encoding='utf-8', mode='r').readlines()
+    lines = [line.replace('\n', ' ') for line in lines]
+
+    lines = ''.join(lines)
+    lines = lines.split('-----------')
+    
+
+    zipped = zip(lines[::3], lines[1::3], lines[2::3])
+    for z in zipped:
+        raw_data = {}
+        raw_data['number'] = z[0].strip()
+        raw_data['streets'] = z[1].strip()
+        raw_data['address'] = z[2].strip()
+        districts.append(raw_data)
+
+    return districts
+
+# loading of districts from 2011
 if False:
-    raw_districts = get_raw_districts_list()
-    with open('data/raw_districts.json', 'w') as outfile:
+    if False:
+        raw_districts = get_raw_districts_list()
+        with open('data/raw_districts.json', 'w') as outfile:
+            json.dump(raw_districts, outfile, indent=4)
+    else:
+        raw_districts = json.load(open('data/raw_districts.json'))
+
+
+raw_districts = get_raw_districts_list_2015()
+
+if False:
+    with open('data/2015_dump.json', 'w') as outfile:
         json.dump(raw_districts, outfile, indent=4)
-else:
-    raw_districts = json.load(open('data/raw_districts.json'))
 
 def parse_streets(data):
     pprint('geocoding for ' + data['address'])

@@ -32,6 +32,9 @@ var selectedDistrictNumber = -1;
 function onDistrictClick(e) {
     $('#district_address').text(e.target.feature.properties.address);
     $('#district_number').text("Numer obwodu: " + e.target.feature.properties.number);
+    results = e.target.feature.properties.results;
+    result_val = results.Razem * 100 / results.Total;
+    $('#district_result').text("Wynik Razem " +  result_val.toFixed(2) + " %"); 
     selectedDistrictNumber = e.target.feature.properties.number;
 }
 

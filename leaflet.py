@@ -94,9 +94,27 @@ def create_address_points(districts):
         with open('html/address_points_' + str(district['number']) + '.json', 'w') as file:
             file.write(json_data)
 
+def get_results():
+    lines = open('data/results_2015.csv', 'r').readlines()
+    lines = lines[1:]
+    lines = [line.split(';') for line in lines]
+
+    return { int(line[4]) : { "Razem" : int(line[88-1]), "Total" : line[27-1] } for line in lines }
+
 
 districts = json.load(open('data/districts.json'))
 districts_json = create_district_hulls(districts)
+
+results = get_results()
+razem_min = int(min([val["Razem"] for (key, val) in results.items()]))
+razem_max = int(max([val["Razem"] for (key, val) in results.items()]))
+
+for d in districts_json['features']:
+    number = int(d['properties']['number'])
+    d['properties']['results'] = results[number]
+    o = d['properties']['results']['Razem'] * 1.0 / (razem_max - razem_min)
+    d['properties']['results']['RazemOpacity'] = 0.3 + o * (1 - 0.3)
+
 json_data = json.dumps(districts_json, indent=4)
 with open('html/election_results.json', 'w') as file:
     file.write(json_data)

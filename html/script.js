@@ -35,6 +35,30 @@ function onDistrictClick(e) {
     selectedDistrictNumber = e.target.feature.properties.number;
 }
 
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(color) {
+    return "#" + componentToHex(color[0]) + componentToHex(color[1]) + componentToHex(color[2]);
+}
+
+var razemColor = [135, 15, 87];
+
+
+
+function resultsStyle(feature) {
+    return {
+        fillColor: rgbToHex(razemColor),
+        weight: 2,
+        opacity: 1,
+        color: '#57C49F',
+        dashArray: '3',
+        fillOpacity: feature.properties.results.RazemOpacity
+    };
+}
+
 function onEachFeatureInResults(feature, layer) {
     if (feature.properties && feature.properties.address) {
         layer.on({
@@ -50,7 +74,8 @@ var election_results
 $.getJSON("election_results.json", function(json) {
     election_results = L.geoJSON(json, 
         { 
-            onEachFeature : onEachFeatureInResults 
+            onEachFeature : onEachFeatureInResults, 
+            style : resultsStyle
         });
     election_results.addTo(mymap);
 });

@@ -185,7 +185,7 @@ def parse_streets(data):
     
     return data
 
-districts = [parse_streets(d) for d in raw_districts[0:3+1]]
+districts = [parse_streets(d) for d in raw_districts[0:20+1]]
 
 with open('data/districts.json', 'w') as outfile:
     json.dump(districts, outfile, indent=4)

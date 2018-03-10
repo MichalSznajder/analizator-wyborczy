@@ -92,8 +92,7 @@ ul. Tęczowa 60
 Grabiszyńska 18, 36, 27-39 nieparzyste, Kolejowa, Prosta, Tęczowa 34-66
 parzyste
 -----------
-Zespół Szkół nr 7
-(Szkoła Podstawowa nr 97)
+Zespół Szkół nr 7 (Szkoła Podstawowa nr 97)
 ul. Prosta 16
 -----------
 12
@@ -200,7 +199,8 @@ ul. Grochowa 13
 Cynowa, Grabiszyńska 108-140 parzyste, 141-170, Mosiężna, Niklowa, Plac
 Srebrny, Stalowa 52-94 parzyste 
 -----------
-Zespół Szkół nr 11 ul. Grochowa 36-38
+Zespół Szkół nr 11 
+ul. Grochowa 36-38
 -----------
 25
 -----------
@@ -253,8 +253,7 @@ ul. Inżynierska 54
 Fiołkowa, Grabiszyńska 241-345 nieparzyste, Klecińska 2-5, 87,89,
 Nasturcjowa, Ostrowskiego
 -----------
-Przychodnia Specjalistyczno-Rehabilitacyjna
-„PULSANTIS” Sp. z o.o.
+Przychodnia Specjalistyczno-Rehabilitacyjna „PULSANTIS” Sp. z o.o.
 ul. Ostrowskiego 3
 -----------
 32
@@ -427,7 +426,7 @@ Kluczborska 4-26 parzyste, Nowowiejska 1-33 nieparzyste, 20-32 parzyste,
 Wygodna, Żeromskiego 33-41 nieparzyste, 38-44 parzyste
 -----------
 Gimnazjum nr 8
-wejście od ul. Jedności Narodowej 112
+ul. Jedności Narodowej 112
 -----------
 52
 -----------
@@ -548,8 +547,7 @@ ul. Nowowiejska 80a
 Bujwida, Czerwonego Krzyża, Gdańska, Grunwaldzka 90-106A parzyste,
 Liskego, Nowowiejska 97-115 nieparzyste, 108-118 parzyste, Piastowska 41-63 nieparzyste, Sienkiewicza 114-146 parzyste, Sopocka
 -----------
-Dolnośląski Oddział Okręgowy
-Polskiego Czerwonego Krzyża
+Dolnośląski Oddział Okręgowy Polskiego Czerwonego Krzyża
 ul. Bujwida 34
 -----------
 66
@@ -735,8 +733,7 @@ ul. Pautscha 4
 Komandorska 66-98 parzyste, 89-177 nieparzyste, Powstańców Śląskich 2-
 54B parzyste, Radosna, Wielka 12-34 parzyste
 -----------
-Sportowa
-Szkoła Podstawowa nr 72
+Sportowa Szkoła Podstawowa nr 72
 ul. Trwała 17-19
 -----------
 86
@@ -766,24 +763,23 @@ ul. Zaporoska 28
 -----------
 Stysia, Zielińskiego 43-61 nieparzyste, 58-74 parzyste 
 -----------
-Centrum Kształcenia Ustawicznego
-ul. Swobodna 73 Budynek - C
+Centrum Kształcenia Ustawicznego Budynek - C
+ul. Swobodna 73 
 -----------
 90
 -----------
 Nasypowa, Swobodna 71/73, 76, 78, Zielińskiego 22-54 parzyste, 39-41
 nieparzyste
 -----------
-Centrum Kształcenia Ustawicznego
-ul. Swobodna 73 Budynek - B
+Centrum Kształcenia Ustawicznego Budynek - B
+ul. Swobodna 73 
 -----------
 91
 -----------
 Drukarska 1-30, Powstańców Śląskich 56-94 parzyste, Trwała, Wielka 29-59
 nieparzyste
 -----------
-Sportowa
-Szkoła Podstawowa nr 72
+Sportowa Szkoła Podstawowa nr 72
 ul. Trwała 17-19 
 -----------
 92
@@ -1006,7 +1002,8 @@ ul. Wieczysta 105
 Boczna, Gajowa 1-19 nieparzyste, 2-26 parzyste, Gliniana 89A-99
 nieparzyste, 62-68 parzyste, Hubska 1-69, Lniana 
 -----------
-Zespół Szkół nr 23 ul. Dawida 9-11
+Zespół Szkół nr 23 
+ul. Dawida 9-11
 -----------
 120
 -----------
@@ -1059,8 +1056,7 @@ Aleja Armii Krajowej 54-70 parzyste, 45-59 nieparzyste, Biskupa Bogedaina,
 Gazowa, Kamieniecka, Księdza Klimasa, Łagiewnicka, Międzyleska,
 Owocowa, Śliwkowa, Tarnogajska, Ząbkowicka, Ziębicka, Złotostocka
 -----------
-Wrocławskie Mieszkania Sp. z o.o.
-BOK nr 6
+Wrocławskie Mieszkania Sp. z o.o. BOK nr 6
 ul. Gazowa 20
 -----------
 127

@@ -884,8 +884,7 @@ ul. Powstańców Śl. 210-218
 Aleja Wiśniowa 1-89 nieparzyste, Brossa, Cisowa, Garwolińska, Grójecka,
 Kutnowska, Rawska, Skierniewicka, Ślężna 88-196, Weigla
 -----------
-Dolnośląski Zakład Doskonalenia
-Zawodowego Zespół Szkół
+Dolnośląski Zakład Doskonalenia Zawodowego Zespół Szkół
 Aleja Wiśniowa 81
 -----------
 105
@@ -918,8 +917,7 @@ ul. Działkowa 15
 Aleja Armii Krajowej 1-37 nieparzyste, Brzoskwiniowa, Jabłeczna, Spiska 5-
 64, Trawna, Żegiestowska
 -----------
-Komenda Wojewódzka Państwowej Straży
-Pożarnej
+Komenda Wojewódzka Państwowej Straży Pożarnej
 ul. Borowska 138
 -----------
 109
@@ -956,8 +954,7 @@ ul. Orzechowa 62
 -----------
 Orzechowa 9-43
 -----------
-Ośrodek Szkolenia Zawodowego we
-Wrocławiu
+Ośrodek Szkolenia Zawodowego we Wrocławiu
 ul. Orzechowa 2
 -----------
 114
@@ -1123,8 +1120,7 @@ ul. Komuny Paryskiej 36-38
 Generała Haukego-Bosaka 2-10, Krasińskiego, Mazowiecka, Podwale 73-79A,
 Traugutta 34-43, 51/53, Walońska, Wybrzeże Słowackiego
 -----------
-Szermiercza Sportowa Szkoła Podstawowa
-nr 85
+Szermiercza Sportowa Szkoła Podstawowa nr 85
 ul. Traugutta 37
 -----------
 135
@@ -1140,8 +1136,7 @@ ul. Generała Haukego-Bosaka 33-37
 Generała Haukego-Bosaka 11-34, Generała Kniaziewicza 1-14, Generała
 Pułaskiego 19-31 nieparzyste, Worcella
 -----------
-Zespół Szkół Teleinformatycznych
-i Elektronicznych
+Zespół Szkół Teleinformatycznych i Elektronicznych
 ul. Generała Haukego-Bosaka 21
 -----------
 137
@@ -1150,8 +1145,7 @@ Dworcowa 2-20 parzyste, Generała Dąbrowskiego 1-17, 19-37 nieparzyste,
 Hercena, Komuny Paryskiej 3-41, 42-46 parzyste, Podwale 67, 67A, 67 OF,
 70
 -----------
-Zespół Szkół
-Ekonomiczno-Administracyjnych
+Zespół Szkół Ekonomiczno-Administracyjnych
 ul. Worcella 3
 -----------
 138
@@ -1214,7 +1208,7 @@ ul. Jagodzińska 15
 -----------
 Franciszki Platówny, Franza Petera Schuberta, Haliny Halskiej, Henryka
 Jareckiego, Jana Kiepury, Jerzego Grady, Johanna Straussa, Johannesa
-Brahmsa, Ludwiga van Beethovena, Ryszarda Wagnera, Sarnia, Vivaldiego,
+Brahmsa, Ludwiga van Beethovena, Ryszarda Wagnera, Sarnia, Vivaldiego
 -----------
 Świetlica Cztery Pory Roku "Zima"
 ul. Ryszarda Wagnera 3
@@ -1305,7 +1299,7 @@ ul. Wojszycka 1
 153
 -----------
 Burzowa, Gradowa, Południowa, Poranna, Powiewna, Wieczorna, Wietrzna
-26-46 parzyste, 109-137 nieparzyte, Zefirowa,
+26-46 parzyste, 109-137 nieparzyte, Zefirowa
 -----------
 Zespół Szkolno-Przedszkolny nr 16
 ul. Wietrzna 50
@@ -1330,7 +1324,7 @@ ul. Wietrzna 50
 156
 -----------
 Aleja Karkonoska, Braterska, Przyjaźni 2-66 parzyste, Rodzinna, Sąsiedzka,
-Siostrzana,
+Siostrzana
 -----------
 Szkoła Podstawowa nr 61
 ul. Skarbowców 8
@@ -1468,8 +1462,7 @@ ul. Zachodnia 2
 Inowrocławska 1-21D nieparzyste, Legnicka 17-27 nieparzyste, Młodych
 Techników 2-14 parzyste, 7, 13/15, Szczepińska, Środkowa
 -----------
-Niepubliczny Zakład Opieki Zdrowotnej
-"STARMED"
+Niepubliczny Zakład Opieki Zdrowotnej "STARMED"
 ul. Młodych Techników 7
 -----------
 173
@@ -1485,8 +1478,7 @@ ul. Braniborska 57
 Braniborska 1-18, Dobra 2/4-16 parzyste, Legnicka 18-24 parzyste,
 Nabycińska, Podwale 1-25, Sokolnicza, Zelwerowicza, Ziemowita
 -----------
-NZOZ Ośrodek Medyczny ”ZIEMO-VITA”
-Sp. z o.o.
+NZOZ Ośrodek Medyczny ”ZIEMO-VITA” Sp. z o.o.
 ul. Ziemowita 1-9
 -----------
 175
@@ -1538,16 +1530,14 @@ Bulwar Ikara 19
 -----------
 Bajana 3-24E, Bulwar Dedala, Drzewieckiego 3-35 nieparzyste, Latawcowa
 -----------
-Przedszkole nr 113 „Akademia
-Przedszkolaka”
+Przedszkole nr 113 „Akademia Przedszkolaka”
 ul. Lotnicza 22
 -----------
 182
 -----------
 Lotnicza 7-103A, Szybowcowa 16-74 parzyste, 15-23 nieparzyste
 -----------
-Przedszkole nr 113 „Akademia
-Przedszkolaka”
+Przedszkole nr 113 „Akademia Przedszkolaka”
 ul. Lotnicza 22
 -----------
 183
@@ -1631,7 +1621,7 @@ ul. Kolista 17
 -----------
 194
 -----------
-Kozanowska 13-62, Pałucka, 
+Kozanowska 13-62, Pałucka 
 -----------
 Wiślańska Gimnazjum nr 7
 ul. Kolista 17
@@ -1815,7 +1805,6 @@ Jaksonowicka, Knignicka, Koszalińska, Międzyzdrojska, Morska, Pucka,
 Pyrzycka, Sukielicka, Uznamska, Wołyńska, Woźnicza, Żernicka 86-130
 parzyste
 -----------
-
 Rada Osiedla Kuźniki
 ul. Sarbinowska 19-21
 -----------
@@ -1970,9 +1959,7 @@ ul. Starogajowa 66-68
 -----------
 Białodrzewna, Bukowa, Grabowa, Kosmonautów 1-29, Lewa, Trójkątna
 -----------
-Dolnośląski Specjalny Ośrodek SzkolnoWychowawczy
-nr 13 dla Niewidomych
-i Słabowidzących
+Dolnośląski Specjalny Ośrodek SzkolnoWychowawczy nr 13 dla Niewidomych i Słabowidzących
 ul. Kamiennogórska 16
 -----------
 235
@@ -2051,7 +2038,7 @@ Daniłowskiego, Plac Marszałka Piłsudskiego, Przesmyckiego,
 Przybyszewskiego, Staffa, Zelenaya
 -----------
 Przedszkole Integracyjne nr 68
-ul. J.Długosza 29
+ul. Jana Długosza 29
 -----------
 244
 -----------
@@ -2073,7 +2060,7 @@ ul. Przybyszewskiego 59
 -----------
 246
 -----------
-Koszarowa, Sołtysowicka 2-22 parzyste, 
+Koszarowa, Sołtysowicka 2-22 parzyste 
 -----------
 Sportowa Gimnazjum nr 24
 ul. Przybyszewskiego 59
@@ -2081,7 +2068,7 @@ ul. Przybyszewskiego 59
 247
 -----------
 Baczyńskiego, Brodzińskiego, Forteczna, Jutrosińska, Kocha, Mochnackiego,
-Pola 50-70 parzyste, 65-77A nieparzyste, Romanowskiego, Torowa,
+Pola 50-70 parzyste, 65-77A nieparzyste, Romanowskiego, Torowa
 Żmigrodzka 9 –36
 -----------
 Szkoła Podstawowa nr 20
@@ -2282,8 +2269,7 @@ Jagiellońska, Kotwiczna, Księżycowa, Łozińska, Marynarska, Niepodległości
 Odolanowska, Odrodzenia Polski, Orna, Skarbu Zakrzowskiego, Spacerowa,
 Stoczniowa
 -----------
-Fundacja „Przyjazny Dom”
-im. Stanisława Jabłonki
+Fundacja „Przyjazny Dom” im. Stanisława Jabłonki
 ul. Okulickiego 2
 -----------
 273
@@ -2293,8 +2279,7 @@ Generała Bora-Komorowskiego, Generała Kopańskiego, Irkucka, Lublańska,
 Masztowa, Okrętowa, Pedagogiczna, Przedwiośnie 1-7, Sarajewska,
 Skopijska, Wallenroda, Wilczkowska, Zagrzebska, Zatorska
 -----------
-Publiczna Szkoła Podstawowa i Przedszkole
-„MARCOPOLO”
+Publiczna Szkoła Podstawowa i Przedszkole „MARCOPOLO”
 ul. Zatorska 11
 -----------
 274
@@ -2311,10 +2296,9 @@ ul. Przedwiośnie 47
 275
 -----------
 Aleja Poprzeczna, Bagatela, Bombardierska, Elementarzowa, Gimnazjalna,
-Knastera, Marczewskiego, Przejazdowa, Redycka 1-90, Strzelecka,
+Knastera, Marczewskiego, Przejazdowa, Redycka 1-90, Strzelecka
 -----------
-Zespół Szkolno-Przedszkolny nr 4
-(Szkoła Podstawowa nr 40)
+Zespół Szkolno-Przedszkolny nr 4 (Szkoła Podstawowa nr 40)
 ul. Sołtysowicka 34
 -----------
 276
@@ -2322,8 +2306,7 @@ ul. Sołtysowicka 34
 Czytankowa, Falskiego, Fortowa, Kanonierska, Lekcyjna, Rafała Wojaczka,
 Sołtysowicka 11-73 nieparzyste, 24-64 parzyste, Torfowa
 -----------
-Zespół Szkolno-Przedszkolny nr 4
-(Szkoła Podstawowa nr 40)
+Zespół Szkolno-Przedszkolny nr 4 (Szkoła Podstawowa nr 40)
 ul. Sołtysowicka 34
 -----------
 277
@@ -2331,10 +2314,9 @@ ul. Sołtysowicka 34
 Adama Jerzego Czartoryskiego, Bukowicka, Kamieńskiego 190-276,
 Korzeńska, Milicka, Osiecka, Pakosławska, Pleszewska, Postolińska, Prusicka,
 Rudawska, Sulejowska, Sulmierzycka, Twardogórska, Wierzchowicka,
-Złotowska,
+Złotowska
 -----------
-Ośrodek Opiekuńczo Adaptacyjny
-„Pensjonat dla Osób Starszych”
+Ośrodek Opiekuńczo Adaptacyjny „Pensjonat dla Osób Starszych”
 ul. Kamieńskiego 190
 -----------
 278
@@ -2345,10 +2327,7 @@ Kubali, Ługowa, Machnicka, Osolska, Polanowicka, Poświęcka, Raszowska,
 Redycka 128-139, Skoczna, Skoroszowska, Starościńska, Stradomska,
 Zawońska, Żmigrodzka 185-257A
 -----------
-Rada Osiedla Polanowice-Poświętne-Ligota
-(budynek Ośrodka OpiekuńczoAdaptacyjnego
-"Pensjonat dla Osób
-Starszych„)
+Rada Osiedla Polanowice-Poświętne-Ligota (budynek Ośrodka OpiekuńczoAdaptacyjnego "Pensjonat dla Osób Starszych„)
 ul. Kamieńskiego 190
 -----------
 279

@@ -8,28 +8,28 @@ from shapely.ops import polygonize
 from scipy.spatial import Voronoi
 import numpy as np
 
-def create_district_points(streets):
+def create_points(streets):
     districts_json = {}
 
     districts_json['type'] = 'FeatureCollection',
     districts_json['features'] = []
     districts_features = districts_json['features'];
 
-    for street_name in district_streets:
-        if not street_name in streets:
-            raise Exception('Street not found ', street_name)
-
+    for street in streets:
         feature = {}
         feature['type'] = 'Feature'
         feature['geometry'] = {}
         
-        feature['geometry']['type'] = 'MultiPoint'
-        feature['geometry']['coordinates'] = streets[street_name]
+        feature['geometry']['type'] = 'Point'
+        feature['geometry']['coordinates'] = street[1]
+
+        feature['properties'] = {}
+        feature['properties']['name'] = street[0]
 
         districts_features.append(feature)
 
     json_data = json.dumps(districts_json)
-    with open('html/districts.json', 'w') as file:
+    with open('html/points.json', 'w') as file:
         file.write(json_data)
 
 
@@ -156,13 +156,15 @@ def voronoi_finite_polygons_2d(vor, radius=None):
 def get_voronoi_polygons(points):
     vor = Voronoi(points)
 
-    (regions, vertices) = voronoi_finite_polygons_2d(vor)
+    (regions, vertices) = voronoi_finite_polygons_2d(vor, radius=1)
 
     return [vertices[region] for region in regions]
 
 def create_districts(polling_places):
 
-    vor = get_voronoi_polygons([p["address_coords"]["coords"] for p in polling_places])
+    p = [[(p["address_coords"]["coords"][0] + p["street_coord"][0])/2, (p["address_coords"]["coords"][1] + p["street_coord"][1])/2] for p in polling_places]
+
+    vor = get_voronoi_polygons(p)
     districts_json = {}
 
     districts_json['type'] = 'FeatureCollection'
@@ -203,12 +205,14 @@ for d in districts_json['features']:
     number = int(d['properties']['number'])
     d['properties']['results'] = results[number]
     o = d['properties']['results']['Razem'] * 1.0 / (razem_max - razem_min)
-    d['properties']['results']['RazemOpacity'] = 0.3 + o * (1 - 0.3)
+    d['properties']['results']['RazemOpacity'] = 0.1 + o * (1 - 0.1)
 
 json_data = json.dumps(districts_json, indent=4)
 with open('html/election_results.json', 'w') as file:
     file.write(json_data)
 
-# create_address_points(districts)
+polling_points = [(p['name'], p['street_coord']) for p in polling_places]
+streets = [(p['address_coords']['stret_name'], p['address_coords']['coords']) for p in polling_places]
+create_points(polling_points + streets)
 
 

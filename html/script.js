@@ -55,7 +55,7 @@ function resultsStyle(feature) {
     return {
         fillColor: rgbToHex(razemColor),
         weight: 2,
-        opacity: 1,
+        opacity: 0.7,
         color: '#57C49F',
         dashArray: '3',
         fillOpacity: feature.properties.results.RazemOpacity
@@ -84,8 +84,8 @@ $.getJSON("election_results.json", function(json) {
 });
 
 function onEachFeature(feature, layer) {
-    if (feature.properties && feature.properties.street_name) {
-        layer.bindPopup(feature.properties.street_name);
+    if (feature.properties && feature.properties.name) {
+        layer.bindPopup(feature.properties.name);
     }
 }
 
@@ -104,7 +104,7 @@ $(function() {
             address_points_layer = null;
         } 
 
-        $.getJSON("address_points_" + selectedDistrictNumber + ".json", function(json) {
+        $.getJSON("points.json", function(json) {
             address_points_layer = L.geoJSON(json, { onEachFeature : onEachFeature }).addTo(mymap);
         });                           
     });

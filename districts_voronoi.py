@@ -10,6 +10,61 @@ import re
 import time
 import codecs
 
+def split_compound_street_name(street_name):
+    """ Analyze provided string as "compound" street name
+    and split it into parts,
+
+    Changes "Kotlarska 2-18, 43 nieparzyste" into
+    "Kotlarska 2-18, Kotlarska 43 nieparzyste"
+    """
+
+    streets = [street.strip() for street in street_name.split(',')]
+
+    ret = []
+    last_street = ""
+    for street in streets:
+        is_broken_street = street[0].isnumeric()
+
+        if is_broken_street:
+            ret.append(last_street + ' ' + street)
+        else:
+            ret.append(street)
+
+        if not is_broken_street:
+            last_street = [s for s in street.split()]
+            last_street = filter(lambda x: not x[0].isnumeric(), last_street)
+            last_street = filter(lambda x: not x == u'parzyste', last_street)
+            last_street = filter(lambda x: not x == u'nieparzyste', last_street)
+            last_street = u' '.join(last_street)
+
+    return ret
+
+
+numbers_regex = re.compile('(\d+)-(\d+)')
+
+def generate_unique_address_points(streets):
+    """Create address points from given address.
+
+    From "Kotlarska 2-18" get "Kotlarska 2, Kotlarska 3, ..."
+    """ 
+    for street in streets:
+        split = numbers_regex.split(street)
+        split_len = len(split)
+
+        if split_len == 1:
+            yield ("street", street)
+        elif split_len == 4:
+            step = 1 if split[3] == u'' else 2
+
+            street_name = split[0]
+            start = int(split[1])
+            end = int(split[2])
+
+            for point in range(start, end, step):
+                yield ("point", street_name + str(point))
+        else:
+            raise Exception('unknown split for ' + street)
+
 
 def perform_geocode(street):
     """ Call OSM to do geocoding 
@@ -17,7 +72,7 @@ def perform_geocode(street):
     1-2 requests per second
     """
 
-    street = street.replace("ul.", "").strip()
+    street = street.replace("ul.", "").replace("hr. ", "").replace("Maxa", "Maksa").replace("Ks. J. ", "").replace(u"Śl. ", "").strip()
 
     # https://wiki.openstreetmap.org/wiki/Nominatim
     query_params = {}
@@ -40,8 +95,6 @@ def perform_geocode(street):
     json_data = response.read()
     json_data = json.loads(json_data)
 
-    
-
     ret = {}
     ret['stret_name'] = street
     
@@ -55,7 +108,7 @@ def perform_geocode(street):
     else:
         raise Exception('unknon geo type ' + bbox['geojson']['type'])
 
-    time.sleep(0.5)
+    time.sleep(1)
 
     return ret
 
@@ -76,7 +129,7 @@ def get_raw_districts_list_2015():
     for z in zipped:
         raw_data = {}
         raw_data['number'] = z[0].replace("|", "").strip()
-        raw_data['streets'] = z[1].strip()
+        raw_data['streets'] = z[1].replace("|", " ").strip()
         raw_data['name'] = z[2].split("|")[1].strip()
         raw_data['address'] = z[2].split("|")[2].strip()
         districts.append(raw_data)
@@ -90,11 +143,24 @@ raw_districts = get_raw_districts_list_2015()
 def parse_streets(data):
     pprint('geocoding for ' + data['address'])
     data['address_coords'] = perform_geocode(data['address']) 
+
+    streets = split_compound_street_name(data['streets'])
+    points = list(generate_unique_address_points(streets))
+    point_coord = perform_geocode(points[0][1])
+
+    data['street_coord'] = point_coord['coords']
+
     
     return data
 
-districts = [parse_streets(d) for d in raw_districts[0:20+1]]
+result = json.load(open('data/polling_places.json'))
 
-with open('data/polling_places.json', 'w') as outfile:
-    json.dump(districts, outfile, indent=4)
+for d in raw_districts[len(result):]:
+    r = parse_streets(d)
+    result.append(r)
+
+    pprint("id " + str(len(result)))
+
+    with open('data/polling_places.json', 'w') as outfile:
+        json.dump(result, outfile, indent=4)
 

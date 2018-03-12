@@ -74,7 +74,7 @@ function onEachFeatureInResults(feature, layer) {
 
 var election_results
 
-$.getJSON("election_results.json", function(json) {
+$.getJSON("data/election_results.json", function(json) {
     election_results = L.geoJSON(json, 
         { 
             onEachFeature : onEachFeatureInResults, 
@@ -104,7 +104,7 @@ $(function() {
             address_points_layer = null;
         } 
 
-        $.getJSON("points.json", function(json) {
+        $.getJSON("data/points.json", function(json) {
             address_points_layer = L.geoJSON(json, { onEachFeature : onEachFeature }).addTo(mymap);
         });                           
     });

@@ -29,7 +29,7 @@ def create_points(streets):
         districts_features.append(feature)
 
     json_data = json.dumps(districts_json)
-    with open('html/points.json', 'w') as file:
+    with open('html/data/points.json', 'w') as file:
         file.write(json_data)
 
 
@@ -208,7 +208,7 @@ for d in districts_json['features']:
     d['properties']['results']['RazemOpacity'] = 0.1 + o * (1 - 0.1)
 
 json_data = json.dumps(districts_json, indent=4)
-with open('html/election_results.json', 'w') as file:
+with open('html/data/election_results.json', 'w') as file:
     file.write(json_data)
 
 polling_points = [(p['name'], p['street_coord']) for p in polling_places]

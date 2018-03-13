@@ -5,3 +5,11 @@
 body {
     margin-left: 50px;
 }
+
+#results-list dt {
+    width: 110px;
+} 
+
+#results-list dd {
+    margin-left: 120px;
+} 

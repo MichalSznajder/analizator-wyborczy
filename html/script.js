@@ -29,6 +29,11 @@ function resetDistrictHighlight(e) {
 }
 
 var selectedDistrictNumber = -1;
+var district_markers = []
+
+blueIcon = L.icon({ iconUrl: 'img/marker-icon-blue.png'});
+greenIcon = L.icon({ iconUrl: 'img/marker-icon-green.png'});
+redIcon = L.icon({ iconUrl: 'img/marker-icon-red.png'});
 
 function onDistrictClick(e) {
     $('#district_address').text(e.target.feature.properties.address);
@@ -38,6 +43,20 @@ function onDistrictClick(e) {
     result_val = results.Razem * 100 / results.Total;
     $('#district_result').text(result_val.toFixed(2) + " %"); 
     selectedDistrictNumber = e.target.feature.properties.number;
+
+    district_markers.forEach(function (e) { mymap.removeLayer(e); })
+    district_markers = []
+
+    var showDetails = $('#show_details_points').prop('checked');
+    if (showDetails)
+    {
+        var icons = e.target.feature.properties.icons;
+        district_markers.push(L.marker(icons.polling_point.coords.slice().reverse()).bindPopup(icons.polling_point.desc).setIcon(blueIcon));
+        district_markers.push(L.marker(icons.helper_street.coords.slice().reverse()).bindPopup(icons.helper_street.desc).setIcon(greenIcon));
+        district_markers.push(L.marker(icons.avg_point.coords.slice().reverse()).bindPopup(icons.avg_point.desc).setIcon(redIcon));
+    
+        district_markers.forEach(function (e) { mymap.addLayer(e); });    
+    }
 }
 
 function componentToHex(c) {
@@ -99,11 +118,8 @@ function getOnEachPointsFeature(icon_image)
         if (feature.properties && feature.properties.name) {
             layer.bindPopup(feature.properties.name);
         }
-
         layer.setIcon(icon)
     }
-    
-
 }
 
 $(function() { 

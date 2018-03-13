@@ -222,18 +222,38 @@ polling_places = json.load(open('data/polling_places.json'))
 districts_json = create_districts(polling_places)
 append_results_data(districts_json)
 
-json_data = json.dumps(districts_json, indent=4)
-with open('html/data/election_results.json', 'w') as file:
-    file.write(json_data)
-
-polling_points = [(p['voting_point']['name'], p['voting_point']['coords']) for p in polling_places]
+polling_points = [('Komisja w ' + p['voting_point']['name'], p['voting_point']['coords']) for p in polling_places]
 write_points_file(polling_points, "polling_places")
 
-helper_streets = [('pomocnicza ulica ' + p['helper_street']['name'] + " dla " + p['voting_point']['name'], p['helper_street']['coords']) for p in polling_places]
+helper_streets = [('Pomocnicza ulica ' + p['helper_street']['name'] + " dla " + p['voting_point']['name'], p['helper_street']['coords']) for p in polling_places]
 write_points_file(helper_streets, "helper_streets")
 
 avg_points = [p for p in get_avg_points(polling_places)]
-avg_points = [('srednia dla ' + z[0]['voting_point']['name'], z[1]) for z in zip(polling_places, avg_points)]
+avg_points = [(u'Średnia dla ' + z[0]['voting_point']['name'], z[1]) for z in zip(polling_places, avg_points)]
 write_points_file(avg_points, 'avg_points')
 
+for d in districts_json['features']:   
+    number = int(d['properties']['number']) - 1
+        
+    polling_point = {}
+    polling_point['desc'] = polling_points[number][0]
+    polling_point['coords'] = polling_points[number][1]
+    
+    helper_street = {}
+    helper_street['desc'] = helper_streets[number][0]
+    helper_street['coords'] = helper_streets[number][1]
+    
+    avg_point = {}
+    avg_point['desc'] = avg_points[number][0]
+    avg_point['coords'] = avg_points[number][1]
+    
+    icons = {}
+    icons['polling_point'] = polling_point
+    icons['helper_street'] = helper_street
+    icons['avg_point'] = avg_point
 
+    d['properties']['icons'] = icons
+
+json_data = json.dumps(districts_json)
+with open('html/data/election_results.json', 'w') as file:
+    file.write(json_data)

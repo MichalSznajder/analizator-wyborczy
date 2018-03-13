@@ -13,8 +13,9 @@ function highlightDistrict(e) {
 
     layer.setStyle({
         weight: 5,
-        color: '#666',
+        color: '#E7C49F',
         dashArray: '',
+        fillColor: "#E7C49F",
         fillOpacity: 0.7
     });
 
@@ -107,47 +108,51 @@ function getOnEachPointsFeature(icon_image)
 
 $(function() { 
     var cbx_polling_places = null;
+
+    $.getJSON("data/polling_places.json", function(json) {
+        cbx_polling_places = L.geoJSON(json, { onEachFeature : getOnEachPointsFeature("marker-icon-blue.png") });
+    }); 
+
+    $.getJSON("data/helper_streets.json", function(json) {
+        cbx_helper_streets = L.geoJSON(json, { onEachFeature : getOnEachPointsFeature("marker-icon-green.png") });
+    });
+
+    $.getJSON("data/avg_points.json", function(json) {
+        cbx_avg_points = L.geoJSON(json, { onEachFeature : getOnEachPointsFeature("marker-icon-red.png") });
+    }); 
+
     $("#cbx_polling_places").click(function() {
-        if (cbx_polling_places === null)
+        if (!mymap.hasLayer(cbx_polling_places))
         {
-            $.getJSON("data/polling_places.json", function(json) {
-                cbx_polling_places = L.geoJSON(json, { onEachFeature : getOnEachPointsFeature("marker-icon-blue.png") }).addTo(mymap);
-            });                               
+            cbx_polling_places.addTo(mymap);
         }
         else
         {
             cbx_polling_places.remove();
-            cbx_polling_places = null;
         }
     });
 
     var cbx_helper_streets = null;
     $("#cbx_helper_streets").click(function() {
-        if (cbx_helper_streets === null)
+        if (!mymap.hasLayer(cbx_helper_streets))
         {
-            $.getJSON("data/helper_streets.json", function(json) {
-                cbx_helper_streets = L.geoJSON(json, { onEachFeature : getOnEachPointsFeature("marker-icon-green.png") }).addTo(mymap);
-            });                               
+            cbx_helper_streets.addTo(mymap);
         }
         else
         {
             cbx_helper_streets.remove();
-            cbx_helper_streets = null;
         }
     });
 
     var cbx_avg_points = null;
     $("#cbx_avg_points").click(function() {
-        if (cbx_avg_points === null)
+        if (!mymap.hasLayer(cbx_avg_points))
         {
-            $.getJSON("data/avg_points.json", function(json) {
-                cbx_avg_points = L.geoJSON(json, { onEachFeature : getOnEachPointsFeature("marker-icon-red.png") }).addTo(mymap);
-            });                               
+            cbx_avg_points.addTo(mymap);
         }
         else
         {
             cbx_avg_points.remove();
-            cbx_avg_points = null;
         }
     });
 });

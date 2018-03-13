@@ -2,7 +2,7 @@ var mymap = L.map('mapid').setView([51.1043471,17.0189813], 13);
 
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWljaGFsc3puYWpkZXIiLCJhIjoiXy04UjRRYyJ9.p9-mkCAFeXfjZ5vzOhXdPw', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-    maxZoom: 18,
+    maxZoom: 21,
     id: 'mapbox.streets',
     accessToken: 'your.mapbox.access.token'
 }).addTo(mymap);
@@ -32,6 +32,7 @@ var selectedDistrictNumber = -1;
 function onDistrictClick(e) {
     $('#district_address').text(e.target.feature.properties.address);
     $('#district_number').text("Numer obwodu: " + e.target.feature.properties.number);
+    $('#district_streets').text("Ulice w obwodzie: " + e.target.feature.properties.streets);
     results = e.target.feature.properties.results;
     result_val = results.Razem * 100 / results.Total;
     $('#district_result').text("Wynik Razem " +  result_val.toFixed(2) + " %"); 

@@ -32,21 +32,30 @@
         <h1>Analizator wyborczy</h1>
     </div>
     <div class="row">
- 
-
     
     <div class="col-xs-8">
         <div id="mapid"></div>
     </div>
 
     <div class="col-xs-4">
-        <div id="district_number"></div>
-        <div id="district_address"></div> <br/>
-        <div id="district_result"></div> <br/>
+        <div class="panel panel-default">
+            <div class="panel-heading">Wyniki w obwodzie</div>
+            <div class="panel-body">
+                <div id="district_number">Wybierz obwód aby poznać wyniki.</div>
+                <div id="district_address"></div> <br/>
+                <div id="district_streets"></div> <br/>
+                <div id="district_result"></div> <br/>
+            </div>
+        </div>    
+        <div class="panel panel-default">
+            <div class="panel-heading">Opcje zaawansowane</div>
+            <div class="panel-body">
+                <div class="checkbox"><label><input type="checkbox" id="cbx_polling_places">Komisje wyborcze</label>&nbsp;<img src="img/marker-icon-blue.png"></div>
+                <div class="checkbox"><label><input type="checkbox" id="cbx_helper_streets">Ulice pomocnicze</label>&nbsp;<img src="img/marker-icon-green.png"></div>
+                <div class="checkbox"><label><input type="checkbox" id="cbx_avg_points">Punkty uśrednione</label>&nbsp;<img src="img/marker-icon-red.png"></div>
+            </div>
+        </div>
 
-        <div class="checkbox"><label><input type="checkbox" id="cbx_polling_places">Komisje wyborcze</label>&nbsp;<img src="img/marker-icon-blue.png"></div>
-        <div class="checkbox"><label><input type="checkbox" id="cbx_helper_streets">Ulice pomocnicze</label>&nbsp;<img src="img/marker-icon-green.png"></div>
-        <div class="checkbox"><label><input type="checkbox" id="cbx_avg_points">Punkty uśrednione</label>&nbsp;<img src="img/marker-icon-red.png"></div>
     </div>
     </div>
 

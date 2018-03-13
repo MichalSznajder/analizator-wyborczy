@@ -190,11 +190,11 @@ def create_districts(polling_places):
         feature = {}
         feature['type'] = 'Feature'
         feature['properties'] = {
-            'address' : place['voting_point']['address'], 
-            'number' : place['number'] 
+            'address' : place['voting_point']['name'] + ' ' + place['voting_point']['address'], 
+            'number' : place['number'],
+            'streets' : place['streets']
         } 
         feature['geometry'] = get_geometry_for_points(points)    
-
         districts_features.append(feature)
 
     return districts_json

@@ -116,7 +116,7 @@ def voronoi_finite_polygons_2d(vor, radius=None):
 
         # reconstruct a non-finite region
         if not p1 in all_ridges:
-            continue
+            raise Exception('incovered region found')
 
         ridges = all_ridges[p1]
         new_region = [v for v in vertices if v >= 0]

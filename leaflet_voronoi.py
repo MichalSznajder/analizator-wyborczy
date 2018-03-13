@@ -8,28 +8,28 @@ from shapely.ops import polygonize
 from scipy.spatial import Voronoi
 import numpy as np
 
-def create_points(streets):
+def write_points_file(points, file_name):
     districts_json = {}
 
     districts_json['type'] = 'FeatureCollection',
     districts_json['features'] = []
     districts_features = districts_json['features'];
 
-    for street in streets:
+    for point in points:
         feature = {}
         feature['type'] = 'Feature'
         feature['geometry'] = {}
         
         feature['geometry']['type'] = 'Point'
-        feature['geometry']['coordinates'] = street[1]
+        feature['geometry']['coordinates'] = point[1]
 
         feature['properties'] = {}
-        feature['properties']['name'] = street[0]
+        feature['properties']['name'] = point[0]
 
         districts_features.append(feature)
 
     json_data = json.dumps(districts_json)
-    with open('html/data/points.json', 'w') as file:
+    with open('html/data/' + file_name + '.json', 'w') as file:
         file.write(json_data)
 
 
@@ -160,23 +160,26 @@ def get_voronoi_polygons(points):
 
     return [vertices[region] for region in regions]
 
+def get_avg_points(polling_places):
+    return [[(p["voting_point"]["coords"][0] + p["helper_street"]["coords"][0])/2, (p["voting_point"]["coords"][1] + p["helper_street"]["coords"][1])/2] for p in polling_places]
+
 def create_districts(polling_places):
 
-    p = [[(p["address_coords"]["coords"][0] + p["street_coord"][0])/2, (p["address_coords"]["coords"][1] + p["street_coord"][1])/2] for p in polling_places]
-
-    vor = get_voronoi_polygons(p)
+    avg_points = get_avg_points(polling_places)
+    
+    vor = get_voronoi_polygons(avg_points)
     districts_json = {}
 
     districts_json['type'] = 'FeatureCollection'
     districts_json['features'] = []
     districts_features = districts_json['features'];
     for place, points in zip(polling_places, vor):
-        pprint('creating for ' + place['address'])
+        pprint('creating for ' + place['voting_point']['address'])
 
         feature = {}
         feature['type'] = 'Feature'
         feature['properties'] = {
-            'address' : place['address'], 
+            'address' : place['voting_point']['address'], 
             'number' : place['number'] 
         } 
         feature['geometry'] = get_geometry_for_points(points)    
@@ -211,8 +214,14 @@ json_data = json.dumps(districts_json, indent=4)
 with open('html/data/election_results.json', 'w') as file:
     file.write(json_data)
 
-polling_points = [(p['name'], p['street_coord']) for p in polling_places]
-streets = [(p['address_coords']['stret_name'], p['address_coords']['coords']) for p in polling_places]
-create_points(polling_points + streets)
+polling_points = [(p['voting_point']['name'], p['voting_point']['coords']) for p in polling_places]
+write_points_file(polling_points, "polling_places")
+
+helper_streets = [('pomocnicza ulica ' + p['helper_street']['name'] + " dla " + p['voting_point']['name'], p['helper_street']['coords']) for p in polling_places]
+write_points_file(helper_streets, "helper_streets")
+
+avg_points = [p for p in get_avg_points(polling_places)]
+avg_points = [('srednia dla ' + z[0]['voting_point']['name'], z[1]) for z in zip(polling_places, avg_points)]
+write_points_file(avg_points, 'avg_points')
 
 

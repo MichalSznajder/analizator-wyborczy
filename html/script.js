@@ -83,38 +83,70 @@ $.getJSON("data/election_results.json", function(json) {
     election_results.addTo(mymap);
 });
 
-function onEachFeature(feature, layer) {
+function onEachPointsFeature(feature, layer) {
     if (feature.properties && feature.properties.name) {
         layer.bindPopup(feature.properties.name);
     }
 }
 
-var address_points_layer = null;
+function getOnEachPointsFeature(icon_image)
+{
+    icon = L.icon({ iconUrl: 'img/' + icon_image });
 
-$(function() {
-    $("#show_address_points").click( function() {
-        if (selectedDistrictNumber === -1)
-        {
-            return;
+    return function (feature, layer) {
+        if (feature.properties && feature.properties.name) {
+            layer.bindPopup(feature.properties.name);
         }
 
-        if (address_points_layer !== null)
-        {
-            address_points_layer.remove();
-            address_points_layer = null;
-        } 
+        layer.setIcon(icon)
+    }
+    
 
-        $.getJSON("data/points.json", function(json) {
-            address_points_layer = L.geoJSON(json, { onEachFeature : onEachFeature }).addTo(mymap);
-        });                           
+}
+
+$(function() { 
+    var cbx_polling_places = null;
+    $("#cbx_polling_places").click(function() {
+        if (cbx_polling_places === null)
+        {
+            $.getJSON("data/polling_places.json", function(json) {
+                cbx_polling_places = L.geoJSON(json, { onEachFeature : getOnEachPointsFeature("marker-icon-blue.png") }).addTo(mymap);
+            });                               
+        }
+        else
+        {
+            cbx_polling_places.remove();
+            cbx_polling_places = null;
+        }
     });
 
-    $("#hide_address_points").click( function() {
-        if (address_points_layer !== null)
+    var cbx_helper_streets = null;
+    $("#cbx_helper_streets").click(function() {
+        if (cbx_helper_streets === null)
         {
-            address_points_layer.remove();
-            address_points_layer = null;
-        } 
-    });                           
+            $.getJSON("data/helper_streets.json", function(json) {
+                cbx_helper_streets = L.geoJSON(json, { onEachFeature : getOnEachPointsFeature("marker-icon-green.png") }).addTo(mymap);
+            });                               
+        }
+        else
+        {
+            cbx_helper_streets.remove();
+            cbx_helper_streets = null;
+        }
+    });
 
+    var cbx_avg_points = null;
+    $("#cbx_avg_points").click(function() {
+        if (cbx_avg_points === null)
+        {
+            $.getJSON("data/avg_points.json", function(json) {
+                cbx_avg_points = L.geoJSON(json, { onEachFeature : getOnEachPointsFeature("marker-icon-red.png") }).addTo(mymap);
+            });                               
+        }
+        else
+        {
+            cbx_avg_points.remove();
+            cbx_avg_points = null;
+        }
+    });
 });

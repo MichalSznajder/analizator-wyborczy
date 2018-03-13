@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 import re
 import time
 import codecs
+import os.path
 
 def split_compound_street_name(street_name):
     """ Analyze provided string as "compound" street name
@@ -130,30 +131,39 @@ def get_raw_districts_list_2015():
         raw_data = {}
         raw_data['number'] = z[0].replace("|", "").strip()
         raw_data['streets'] = z[1].replace("|", " ").strip()
-        raw_data['name'] = z[2].split("|")[1].strip()
-        raw_data['address'] = z[2].split("|")[2].strip()
+        raw_data['voting_point'] = {}
+        raw_data['voting_point']['name'] = z[2].split("|")[1].strip()
+        raw_data['voting_point']['address'] = z[2].split("|")[2].strip()
         districts.append(raw_data)
 
     return districts
 
-raw_districts = get_raw_districts_list_2015()
 
 
 
 def parse_streets(data):
-    pprint('geocoding for ' + data['address'])
-    data['address_coords'] = perform_geocode(data['address']) 
+    pprint('geocoding for ' + data['voting_point']['address'])
+    data['voting_point']['coords'] = perform_geocode(data['voting_point']['address'])['coords'] 
 
     streets = split_compound_street_name(data['streets'])
     points = list(generate_unique_address_points(streets))
     point_coord = perform_geocode(points[0][1])
 
-    data['street_coord'] = point_coord['coords']
-
-    
+    data['helper_street'] = {}
+    data['helper_street']['coords'] = point_coord['coords']
+    data['helper_street']['name'] = points[0][1]
+   
     return data
 
-result = json.load(open('data/polling_places.json'))
+
+result = []
+
+try:
+    result = json.load(open('data/polling_places.json'))
+except:
+    pass
+
+raw_districts = get_raw_districts_list_2015()
 
 for d in raw_districts[len(result):]:
     r = parse_streets(d)

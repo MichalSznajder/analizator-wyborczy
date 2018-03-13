@@ -4,6 +4,7 @@
 import json
 from pprint import pprint
 from shapely.geometry import LineString, Polygon, Point, box
+from shapely.geometry import shape, mapping
 from shapely.ops import polygonize
 from scipy.spatial import Voronoi
 import numpy as np
@@ -33,6 +34,9 @@ def write_points_file(points, file_name):
         file.write(json_data)
 
 
+border_json = json.load(open('data/wroclaw_border.json'))
+border = shape(border_json)
+
 def get_geometry_for_points(points):
     geometry = {}    
     
@@ -40,8 +44,15 @@ def get_geometry_for_points(points):
     coords = points.tolist()
     coords.append(coords[0])
     geometry['coordinates'] = [coords]
-    
-    return geometry
+
+    # snap to border
+    geom = shape(geometry)
+    intersected = mapping(border.intersection(geom))
+    coord = intersected['coordinates']
+
+    geometry['coordinates'] = coord
+
+    return intersected
 
 def create_district_hulls(districts):
     districts_json = {}
@@ -196,19 +207,20 @@ def get_results():
 
     return { int(line[4]) : { "Razem" : int(line[88-1]), "Total" : line[27-1] } for line in lines }
 
+def append_results_data(districts_json):
+    results = get_results()
+    razem_min = int(min([val["Razem"] for (key, val) in results.items()]))
+    razem_max = int(max([val["Razem"] for (key, val) in results.items()]))
+
+    for d in districts_json['features']:
+        number = int(d['properties']['number'])
+        d['properties']['results'] = results[number]
+        o = d['properties']['results']['Razem'] * 1.0 / (razem_max - razem_min)
+        d['properties']['results']['RazemOpacity'] = 0.1 + o * (1 - 0.1)
 
 polling_places = json.load(open('data/polling_places.json'))
 districts_json = create_districts(polling_places)
-
-results = get_results()
-razem_min = int(min([val["Razem"] for (key, val) in results.items()]))
-razem_max = int(max([val["Razem"] for (key, val) in results.items()]))
-
-for d in districts_json['features']:
-    number = int(d['properties']['number'])
-    d['properties']['results'] = results[number]
-    o = d['properties']['results']['Razem'] * 1.0 / (razem_max - razem_min)
-    d['properties']['results']['RazemOpacity'] = 0.1 + o * (1 - 0.1)
+append_results_data(districts_json)
 
 json_data = json.dumps(districts_json, indent=4)
 with open('html/data/election_results.json', 'w') as file:

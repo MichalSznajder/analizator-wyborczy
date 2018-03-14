@@ -327,8 +327,12 @@
             }, 
             "type": "Feature", 
             "properties": {
-                "Razem": 2175, 
-                "Total": 45087
+                "number": 1, 
+                "results": {
+                    "razem": 2175, 
+                    "total": 45087
+                }, 
+                "name": "1 STARE MIASTO, PRZEDMIES\u0301CIE S\u0301WIDNICKIE, GAJOWICE, GRABISZYN - GRABISZYNEK, NADODRZE, KLECZKO\u0301W"
             }
         }, 
         {
@@ -813,8 +817,12 @@
             }, 
             "type": "Feature", 
             "properties": {
-                "Razem": 1855, 
-                "Total": 37372
+                "number": 2, 
+                "results": {
+                    "razem": 1855, 
+                    "total": 37372
+                }, 
+                "name": "2 O\u0141BIN, PL. GRUNWALDZKI, ZACISZE - ZALESIE - SZCZYTNIKI, BISKUPIN - SE\u0328POLNO - DA\u0328BIE - BARTOSZOWICE"
             }
         }, 
         {
@@ -1047,8 +1055,12 @@
             }, 
             "type": "Feature", 
             "properties": {
-                "Razem": 2184, 
-                "Total": 48000
+                "number": 3, 
+                "results": {
+                    "razem": 2184, 
+                    "total": 48000
+                }, 
+                "name": "3 POWSTAN\u0301CO\u0301W S\u0301LA\u0328SKICH, BOREK, GAJ, HUBY, TARNOGAJ"
             }
         }, 
         {
@@ -3515,8 +3527,12 @@
             }, 
             "type": "Feature", 
             "properties": {
-                "Razem": 1846, 
-                "Total": 40078
+                "number": 4, 
+                "results": {
+                    "razem": 1846, 
+                    "total": 40078
+                }, 
+                "name": "4 PRZEDMIES\u0301CIE O\u0141AWSKIE, KSIE\u0328Z\u0307E, BROCHO\u0301W, BIEN\u0301KOWICE, JAGODNO, WOJSZYCE, O\u0141TASZYN, KRZYKI - PARTYNICE, KLECINA, OPORO\u0301W"
             }
         }, 
         {
@@ -3701,8 +3717,12 @@
             }, 
             "type": "Feature", 
             "properties": {
-                "Razem": 2068, 
-                "Total": 42923
+                "number": 5, 
+                "results": {
+                    "razem": 2068, 
+                    "total": 42923
+                }, 
+                "name": "5 SZCZEPIN, GA\u0328DO\u0301W \u2013 POPOWICE P\u0141D., PILCZYCE \u2013 KOZANO\u0301W \u2013 POPOWICE P\u0141N."
             }
         }, 
         {
@@ -8527,8 +8547,12 @@
             }, 
             "type": "Feature", 
             "properties": {
-                "Razem": 1999, 
-                "Total": 42161
+                "number": 6, 
+                "results": {
+                    "razem": 1999, 
+                    "total": 42161
+                }, 
+                "name": "6 MUCHOBO\u0301R MA\u0141Y, NOWY DWO\u0301R, KUZ\u0301NIKI, MUCHOBO\u0301R WIELKI, Z\u0307ERNIKI, JERZMANOWO \u2013 JARNO\u0141TO\u0301W \u2013 STRACHOWICE \u2013 OSINIEC, LES\u0301NICA, MAS\u0301LICE, PRACZE ODRZAN\u0301SKIE"
             }
         }, 
         {
@@ -14145,8 +14169,12 @@
             }, 
             "type": "Feature", 
             "properties": {
-                "Razem": 1944, 
-                "Total": 41832
+                "number": 7, 
+                "results": {
+                    "razem": 1944, 
+                    "total": 41832
+                }, 
+                "name": "7 KAR\u0141OWICE \u2013 RO\u0301Z\u0307ANKA, KOWALE, SWOJCZYCE \u2013 STRACHOCIN \u2013 WOJNO\u0301W, PSIE POLE \u2013 ZAWIDAWIE, PAW\u0141OWICE, SO\u0141TYSOWICE, POLANOWICE \u2013 POS\u0301WIE\u0328TNE \u2013 LIGOTA, WIDAWA, LIPA PIOTROWSKA, S\u0301WINIARY, OSOBOWICE \u2013 REDZIN"
             }
         }
     ]

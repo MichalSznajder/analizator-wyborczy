@@ -268,10 +268,10 @@ for d in districts_json['features']:
     number = int(d['properties']['number'])
 
     r = [r for r in zip(borough_ranges, range(len(borough_ranges))) if r[0][0] <= number <= r[0][1]]
-    d['properties']['big_district'] = r[0][1] + 1
+    d['properties']['borough_number'] = r[0][1] + 1
 
 di_json = json.dumps(feature_collection, indent=4)
-with open('html/data/big_district.json', 'w') as file:
+with open('html/data/boroughs.json', 'w') as file:
     file.write(di_json)
 
 json_data = json.dumps(districts_json)

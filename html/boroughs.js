@@ -69,7 +69,7 @@ $(function() {
     }).addTo(mymap);
 
 
-    $.getJSON("data/big_district.json", function(json) {
+    $.getJSON("data/boroughs.json", function(json) {
         boroughs = L.geoJSON(json, { 
             onEachFeature : onEachFeatureInBoroughs,
             style : boroughsStyle } )

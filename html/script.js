@@ -35,29 +35,20 @@ blueIcon = L.icon({ iconUrl: 'img/marker-icon-blue.png'});
 greenIcon = L.icon({ iconUrl: 'img/marker-icon-green.png'});
 redIcon = L.icon({ iconUrl: 'img/marker-icon-red.png'});
 
-bigDistrictsNames = [
-    "1 STARE MIASTO, PRZEDMIEŚCIE ŚWIDNICKIE, GAJOWICE, GRABISZYN - GRABISZYNEK, NADODRZE, KLECZKÓW",
-    "2 OŁBIN, PL. GRUNWALDZKI, ZACISZE - ZALESIE - SZCZYTNIKI, BISKUPIN - SĘPOLNO - DĄBIE - BARTOSZOWICE",
-    "3 POWSTAŃCÓW ŚLĄSKICH, BOREK, GAJ, HUBY, TARNOGAJ",
-    "4 PRZEDMIEŚCIE OŁAWSKIE, KSIĘŻE, BROCHÓW, BIEŃKOWICE, JAGODNO, WOJSZYCE, OŁTASZYN, KRZYKI - PARTYNICE, KLECINA, OPORÓW",
-    "5 SZCZEPIN, GĄDÓW – POPOWICE PŁD., PILCZYCE – KOZANÓW – POPOWICE PŁN.",
-    "6 MUCHOBÓR MAŁY, NOWY DWÓR, KUŹNIKI, MUCHOBÓR WIELKI, ŻERNIKI, JERZMANOWO – JARNOŁTÓW – STRACHOWICE – OSINIEC, LEŚNICA, MAŚLICE, PRACZE ODRZAŃSKIE",
-    "7 KARŁOWICE – RÓŻANKA, KOWALE, SWOJCZYCE – STRACHOCIN – WOJNÓW, PSIE POLE – ZAWIDAWIE, PAWŁOWICE, SOŁTYSOWICE, POLANOWICE – POŚWIĘTNE – LIGOTA, WIDAWA, LIPA PIOTROWSKA, ŚWINIARY, OSOBOWICE – REDZIN",
-]
-
 function onDistrictClick(e) {
     $('#district_address').text(e.target.feature.properties.address);
     $('#district_number').text(e.target.feature.properties.number);
     $('#district_streets').text(e.target.feature.properties.streets);
+
     results = e.target.feature.properties.results;
     result_val = results.Razem * 100 / results.Total;
     $('#district_result').text(result_val.toFixed(2) + " % (" + results.Razem + " głosów z " + results.Total + ")"); 
     selectedDistrictNumber = e.target.feature.properties.number;
 
-    bigDistricts.forEach(function (e) { mymap.removeLayer(e); });
-    var biDistrictId = e.target.feature.properties.big_district-1;
-    mymap.addLayer(bigDistricts[biDistrictId]);
-    $('#big_district').text(bigDistrictsNames[biDistrictId]);
+    boroughLayers.forEach(function (e) { mymap.removeLayer(e); });
+    var boroughId = e.target.feature.properties.borough_number-1;
+    mymap.addLayer(boroughLayers[boroughId]);
+    $('#borough_name').text(boroughFeatures[boroughId].properties.name);
 
     district_markers.forEach(function (e) { mymap.removeLayer(e); })
     district_markers = []
@@ -137,28 +128,30 @@ function getOnEachPointsFeature(icon_image)
     }
 }
 
-mymap.createPane('bigDistrict');
-mymap.getPane('bigDistrict').style.zIndex = 620;
+mymap.createPane('boroughPane');
+mymap.getPane('boroughPane').style.zIndex = 620;
 
-var bigDistrictsStyle = { 
+var boroughStyle = { 
     "fill" : false,
     "color" : "#3A0123",
     "dashArray" : "5, 1",
     "weight" : 5
 }
 
-var bigDistricts = []
+var boroughLayers = []
+var boroughFeatures = []
 
-function onEachFeatureInBigDistrict(feature, layer) {
-    bigDistricts.push(L.geoJSON(feature, { style : bigDistrictsStyle, pane : 'bigDistrict' }));
+function onEachFeatureInBorough(feature, layer) {
+    boroughLayers.push(L.geoJSON(feature, { style : boroughStyle, pane : 'boroughPane' }));
+    boroughFeatures.push(feature);
 }
 
 $(function() { 
     var cbx_polling_places = null;
 
-    $.getJSON("data/big_district.json", function(json) {
+    $.getJSON("data/boroughs.json", function(json) {
         L.geoJSON(json, {
-            onEachFeature : onEachFeatureInBigDistrict} );
+            onEachFeature : onEachFeatureInBorough} );
     }); 
 
     $.getJSON("data/polling_places.json", function(json) {

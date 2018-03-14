@@ -73,7 +73,6 @@ function rgbToHex(color) {
 var razemColor = [135, 15, 87];
 
 
-
 function resultsStyle(feature) {
     return {
         fillColor: rgbToHex(razemColor),

@@ -26,46 +26,59 @@
 
   </head>
   <body>
-
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand">Analizator wyborczy</p> 
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="index.html">Obwody</a></li>
+                <li><a href="boroughs.html">Dzielnice</a></li>
+            </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+          
     <div class="container-fluid">
-    <div class="row">
-        <h1>Analizator wyborczy</h1>
-    </div>
-    <div class="row">
-    
-    <div class="col-xs-8">
-        <div id="mapid"></div>
-    </div>
-
-    <div class="col-xs-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">Wyniki w obwodzie</div>
-            <div class="panel-body">
-                <dl class="dl-horizontal" id="results-list">
-                    <dt>Okręg:</dt>
-                    <dd><div id="big_district"></div></dd>
-                    <dt>Numer obwodu:</dt>
-                    <dd><div id="district_number">Wybierz obwód aby poznać wyniki.</div></dd>
-                    <dt>Komisja:</dt>
-                    <dd><div id="district_address"></div><dd>
-                    <dt>Ulice obwodu:</dt>
-                    <dd><div id="district_streets"></div></dd>
-                    <dt>Wynik Razem:</dt>
-                    <dd><div id="district_result"></div></dd>
-                </dl>
-            </div>
-        </div>    
-        <div class="panel panel-default">
-            <div class="panel-heading">Opcje zaawansowane</div>
-            <div class="panel-body">
-                <div class="checkbox"><label><input type="checkbox" id="show_details_points">Pokazu szczegółowe punkty dla jednego okręgu</label></div>
-                <div class="checkbox"><label><input type="checkbox" id="cbx_polling_places">Komisje wyborcze</label>&nbsp;<img src="img/marker-icon-blue.png"></div>
-                <div class="checkbox"><label><input type="checkbox" id="cbx_helper_streets">Ulice pomocnicze</label>&nbsp;<img src="img/marker-icon-green.png"></div>
-                <div class="checkbox"><label><input type="checkbox" id="cbx_avg_points">Punkty uśrednione</label>&nbsp;<img src="img/marker-icon-red.png"></div>
-            </div>
+        <div class="col-xs-8">
+            <div id="mapid"></div>
         </div>
 
-    </div>
+        <div class="col-xs-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">Wyniki w obwodzie</div>
+                <div class="panel-body">
+                    <dl class="dl-horizontal" id="results-list">
+                        <dt>Okręg:</dt>
+                        <dd><div id="big_district"></div></dd>
+                        <dt>Numer obwodu:</dt>
+                        <dd><div id="district_number">Wybierz obwód aby poznać wyniki.</div></dd>
+                        <dt>Komisja:</dt>
+                        <dd><div id="district_address"></div><dd>
+                        <dt>Ulice obwodu:</dt>
+                        <dd><div id="district_streets"></div></dd>
+                        <dt>Wynik Razem:</dt>
+                        <dd><div id="district_result"></div></dd>
+                    </dl>
+                </div>
+            </div>    
+            <div class="panel panel-default">
+                <div class="panel-heading">Opcje zaawansowane</div>
+                <div class="panel-body">
+                    <div class="checkbox"><label><input type="checkbox" id="show_details_points">Pokazu szczegółowe punkty dla jednego okręgu</label></div>
+                    <div class="checkbox"><label><input type="checkbox" id="cbx_polling_places">Komisje wyborcze</label>&nbsp;<img src="img/marker-icon-blue.png"></div>
+                    <div class="checkbox"><label><input type="checkbox" id="cbx_helper_streets">Ulice pomocnicze</label>&nbsp;<img src="img/marker-icon-green.png"></div>
+                    <div class="checkbox"><label><input type="checkbox" id="cbx_avg_points">Punkty uśrednione</label>&nbsp;<img src="img/marker-icon-red.png"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

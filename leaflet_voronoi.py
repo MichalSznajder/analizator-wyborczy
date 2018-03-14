@@ -8,6 +8,7 @@ from shapely.geometry import shape, mapping
 from shapely.ops import polygonize
 from scipy.spatial import Voronoi
 import numpy as np
+from shapely.ops import cascaded_union
 
 def write_points_file(points, file_name):
     districts_json = {}
@@ -53,29 +54,6 @@ def get_geometry_for_points(points):
     geometry['coordinates'] = coord
 
     return intersected
-
-def create_district_hulls(districts):
-    districts_json = {}
-
-    districts_json['type'] = 'FeatureCollection'
-    districts_json['features'] = []
-    districts_features = districts_json['features'];
-
-    for district_data in districts:
-        pprint('creating for ' + district_data['address'])
-        hull_points = [c for coords in district_data['coords'] for c in coords['coords']]
-
-        feature = {}
-        feature['type'] = 'Feature'
-        feature['properties'] = {
-            'address' : district_data['address'], 
-            'number' : district_data['number'] 
-        } 
-        feature['geometry'] = get_geometry_hull_for_points(hull_points)    
-
-        districts_features.append(feature)
-
-    return districts_json
 
 def voronoi_finite_polygons_2d(vor, radius=None):
     """
@@ -254,6 +232,32 @@ for d in districts_json['features']:
 
     d['properties']['icons'] = icons
 
+
+from geojson import Feature, Point, FeatureCollection, GeometryCollection
+
+ranges = [(1, 48), (49, 84), (85, 126), (127, 161), (162, 201), (202, 240), (241, 281)]
+
+x = []
+for r in ranges:
+    di = [d for d in districts_json['features'] if r[0] <= int(d['properties']['number']) <= r[1] ]
+    di = [shape(d['geometry']) for d in di]
+    di = cascaded_union(di)
+    di = mapping(di)
+
+    x.append(Feature(geometry=di))
+
+feature_collection = FeatureCollection(x)
+
+for d in districts_json['features']:   
+    number = int(d['properties']['number'])
+
+    r = [r for r in zip(ranges, range(len(ranges))) if r[0][0] <= number <= r[0][1]]
+    d['properties']['big_district'] = r[0][1] + 1
+
+di_json = json.dumps(feature_collection, indent=4)
+with open('html/data/big_district.json', 'w') as file:
+    file.write(di_json)
+
 json_data = json.dumps(districts_json)
 with open('html/data/election_results.json', 'w') as file:
-    file.write(json_data)
+    file.write(json_data)    

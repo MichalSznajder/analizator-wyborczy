@@ -2140,8 +2140,8 @@
         }, 
         "helper_street": {
             "coords": [
-                17.0913959, 
-                51.0446178
+                17.040777, 
+                51.082700
             ], 
             "name": "Orzechowa 9"
         }
@@ -2151,8 +2151,9 @@
         "number": "114", 
         "voting_point": {
             "coords": [
-                16.8073393, 
-                51.1389477
+                17.040356, 
+                51.094389
+
             ], 
             "name": "Szko\u0142a Podstawowa nr 73 ul. Gliniana 30", 
             "address": ""

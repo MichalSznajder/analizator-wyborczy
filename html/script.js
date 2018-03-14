@@ -51,7 +51,7 @@ function onDistrictClick(e) {
     $('#district_streets').text(e.target.feature.properties.streets);
     results = e.target.feature.properties.results;
     result_val = results.Razem * 100 / results.Total;
-    $('#district_result').text(result_val.toFixed(2) + " %"); 
+    $('#district_result').text(result_val.toFixed(2) + " % (" + results.Razem + " głosów z " + results.Total + ")"); 
     selectedDistrictNumber = e.target.feature.properties.number;
 
     bigDistricts.forEach(function (e) { mymap.removeLayer(e); });

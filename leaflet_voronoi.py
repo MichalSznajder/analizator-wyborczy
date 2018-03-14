@@ -9,6 +9,8 @@ from shapely.ops import polygonize
 from scipy.spatial import Voronoi
 import numpy as np
 from shapely.ops import cascaded_union
+from geojson import Feature, Point, FeatureCollection, GeometryCollection
+
 
 def write_points_file(points, file_name):
     districts_json = {}
@@ -183,7 +185,7 @@ def get_results():
     lines = lines[1:]
     lines = [line.split(';') for line in lines]
 
-    return { int(line[4]) : { "Razem" : int(line[88-1]), "Total" : line[27-1] } for line in lines }
+    return { int(line[4]) : { "Razem" : int(line[88-1]), "Total" : int(line[27-1]) } for line in lines }
 
 def append_results_data(districts_json):
     results = get_results()
@@ -233,25 +235,39 @@ for d in districts_json['features']:
     d['properties']['icons'] = icons
 
 
-from geojson import Feature, Point, FeatureCollection, GeometryCollection
 
-ranges = [(1, 48), (49, 84), (85, 126), (127, 161), (162, 201), (202, 240), (241, 281)]
+borough_ranges = [(1, 48), (49, 84), (85, 126), (127, 161), (162, 201), (202, 240), (241, 281)]
+borough_names = [
+    u"1 STARE MIASTO, PRZEDMIEŚCIE ŚWIDNICKIE, GAJOWICE, GRABISZYN - GRABISZYNEK, NADODRZE, KLECZKÓW",
+    u"2 OŁBIN, PL. GRUNWALDZKI, ZACISZE - ZALESIE - SZCZYTNIKI, BISKUPIN - SĘPOLNO - DĄBIE - BARTOSZOWICE",
+    u"3 POWSTAŃCÓW ŚLĄSKICH, BOREK, GAJ, HUBY, TARNOGAJ",
+    u"4 PRZEDMIEŚCIE OŁAWSKIE, KSIĘŻE, BROCHÓW, BIEŃKOWICE, JAGODNO, WOJSZYCE, OŁTASZYN, KRZYKI - PARTYNICE, KLECINA, OPORÓW",
+    u"5 SZCZEPIN, GĄDÓW – POPOWICE PŁD., PILCZYCE – KOZANÓW – POPOWICE PŁN.",
+    u"6 MUCHOBÓR MAŁY, NOWY DWÓR, KUŹNIKI, MUCHOBÓR WIELKI, ŻERNIKI, JERZMANOWO – JARNOŁTÓW – STRACHOWICE – OSINIEC, LEŚNICA, MAŚLICE, PRACZE ODRZAŃSKIE",
+    u"7 KARŁOWICE – RÓŻANKA, KOWALE, SWOJCZYCE – STRACHOCIN – WOJNÓW, PSIE POLE – ZAWIDAWIE, PAWŁOWICE, SOŁTYSOWICE, POLANOWICE – POŚWIĘTNE – LIGOTA, WIDAWA, LIPA PIOTROWSKA, ŚWINIARY, OSOBOWICE – REDZIN",
+]
 
 x = []
-for r in ranges:
-    di = [d for d in districts_json['features'] if r[0] <= int(d['properties']['number']) <= r[1] ]
-    di = [shape(d['geometry']) for d in di]
+for (r, i) in zip(borough_ranges, range(len(borough_names))):
+    districts = [d for d in districts_json['features'] if r[0] <= int(d['properties']['number']) <= r[1] ]
+    di = [shape(d['geometry']) for d in districts]
     di = cascaded_union(di)
     di = mapping(di)
 
-    x.append(Feature(geometry=di))
+    properties = {}
+    properties['results'] = {}
+    properties['results']['razem'] = sum([d['properties']['results']['Razem'] for d in districts])
+    properties['results']['total'] = sum([d['properties']['results']['Total'] for d in districts])
+    properties['name'] = borough_names[i];
+    properties['number'] = i+1;
+    x.append(Feature(geometry=di, properties=properties))
 
 feature_collection = FeatureCollection(x)
 
 for d in districts_json['features']:   
     number = int(d['properties']['number'])
 
-    r = [r for r in zip(ranges, range(len(ranges))) if r[0][0] <= number <= r[0][1]]
+    r = [r for r in zip(borough_ranges, range(len(borough_ranges))) if r[0][0] <= number <= r[0][1]]
     d['properties']['big_district'] = r[0][1] + 1
 
 di_json = json.dumps(feature_collection, indent=4)

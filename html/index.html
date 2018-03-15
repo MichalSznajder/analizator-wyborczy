@@ -35,11 +35,11 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand">Analizator wyborczy</p> 
+            <a class="navbar-brand" href="index.html">Analizator wyborczy</p> 
             </div>
             <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="index.html">Obwody</a></li>
+                <li><a href="districts.html">Obwody</a></li>
                 <li><a href="boroughs.html">Dzielnice</a></li>
             </ul>
             </div><!--/.nav-collapse -->
@@ -48,36 +48,8 @@
           
     <div class="container-fluid">
         <div class="col-xs-8">
-            <div id="mapid"></div>
-        </div>
-
-        <div class="col-xs-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">Wyniki w obwodzie</div>
-                <div class="panel-body">
-                    <dl class="dl-horizontal" id="results-list">
-                        <dt>Okręg:</dt>
-                        <dd><div id="borough_name"></div></dd>
-                        <dt>Numer obwodu:</dt>
-                        <dd><div id="district_number">Wybierz obwód aby poznać wyniki.</div></dd>
-                        <dt>Komisja:</dt>
-                        <dd><div id="district_address"></div><dd>
-                        <dt>Ulice obwodu:</dt>
-                        <dd><div id="district_streets"></div></dd>
-                        <dt>Wynik Razem:</dt>
-                        <dd><div id="district_result"></div></dd>
-                    </dl>
-                </div>
-            </div>    
-            <div class="panel panel-default">
-                <div class="panel-heading">Opcje zaawansowane</div>
-                <div class="panel-body">
-                    <div class="checkbox"><label><input type="checkbox" id="show_details_points">Pokazu szczegółowe punkty dla jednego okręgu</label></div>
-                    <div class="checkbox"><label><input type="checkbox" id="cbx_polling_places">Komisje wyborcze</label>&nbsp;<img src="img/marker-icon-blue.png"></div>
-                    <div class="checkbox"><label><input type="checkbox" id="cbx_helper_streets">Ulice pomocnicze</label>&nbsp;<img src="img/marker-icon-green.png"></div>
-                    <div class="checkbox"><label><input type="checkbox" id="cbx_avg_points">Punkty uśrednione</label>&nbsp;<img src="img/marker-icon-red.png"></div>
-                </div>
-            </div>
+            <h1>Analizator wyborczy</h1>
+            <p>Analizator wyborczy dla Wrocławia.</p>
         </div>
     </div>
 
@@ -86,10 +58,5 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     
-    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
-    integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
-    crossorigin=""></script>  
-
-    <script src="script.js"> </script>
 </body>
 </html>

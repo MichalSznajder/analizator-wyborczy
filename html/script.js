@@ -103,24 +103,37 @@ function createLegend(election_results_json)
     var avgs = election_results_json.features.map(x => x.properties.results).map(x => x.razem * 100 / x.total).sort();  
     var total_steps = legendColors.length;
     var step = avgs.length / total_steps;
-    for(i = 1; i < total_steps; i++)
+    for(i = 0; i < total_steps; i++)
     {
         var legend_item = {
             step : i, 
-            begin : avgs[Math.round((i - 1 ) * step)],
-            end : avgs[Math.round(i * step)],
+            begin : avgs[Math.round(i * step)],
+            end : avgs[Math.round((i+1) * step)],
             color : legendColors[i]
         }
         legend.push(legend_item);
     }
+    legend[0].begin = 0;
+    legend[legend.length-1].end = Infinity;
 
-    var legend_item = {
-        step : total_steps, 
-        begin : legend[total_steps-2].end,
-        end : Infinity,
-        color : legendColors[total_steps - 1]
-    }
-    legend.push(legend_item);
+    var legendControl = L.control({position: 'bottomright'});
+    legendControl.onAdd = function (map) {
+    
+        var div = L.DomUtil.create('div', 'info legend')
+        // loop through our density intervals and generate a label with a colored square for each interval
+        for (var i = 0; i < legend.length; i++) {
+            div.innerHTML +=                
+                '<i style="background:' + legend[i].color + '"></i> ' +
+                legend[i].begin.toFixed(2) + '% ' +
+                (isFinite(legend[i].end) ? '&ndash; ' + legend[i].end.toFixed(2) + '% ' : ' +') +
+                '<br />';
+        }
+    
+        return div;
+    };
+    
+    legendControl.addTo(mainMap);
+
 }
 
 function getLegendColorForValue(val) {

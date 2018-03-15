@@ -1,4 +1,5 @@
 var mainMap = L.map('mapid').setView([51.1043471,17.0189813], 13);
+
 var blueIcon = L.icon({ iconUrl: 'img/marker-icon-blue.png'});
 var greenIcon = L.icon({ iconUrl: 'img/marker-icon-green.png'});
 var redIcon = L.icon({ iconUrl: 'img/marker-icon-red.png'});
@@ -6,6 +7,9 @@ var razemColor = [135, 15, 87];
 
 var election_results_layer = null;
 var election_results_json = null;
+
+var boroughLayers = []
+var boroughFeatures = []
 
 var legendColors  = ['#800026', '#BD0026', '#E31A1C', '#FC4E2A', '#FD8D3C', '#FEB24C', '#FED976', '#FFEDA0'].reverse();
 var legend = []
@@ -51,7 +55,7 @@ function onDistrictClick(e) {
 
     results = e.target.feature.properties.results;
     result_val = results.Razem * 100 / results.Total;
-    $('#district_result').text(result_val.toFixed(2) + " % (" + results.Razem + " głosów z " + results.Total + ")"); 
+    $('#district_result').text(result_val.toFixed(2) + " % (" + results.razem + " głosów z " + results.total + ")"); 
     selectedDistrictNumber = e.target.feature.properties.number;
 
     boroughLayers.forEach(function (e) { mainMap.removeLayer(e); });
@@ -96,7 +100,7 @@ function resetDistrictHighlight(e) {
 
 function createLegend(election_results_json)
 {
-    var avgs = election_results_json.features.map(x => x.properties.results).map(x => x.Razem * 100 / x.Total).sort();  
+    var avgs = election_results_json.features.map(x => x.properties.results).map(x => x.razem * 100 / x.total).sort();  
     var total_steps = legendColors.length;
     var step = avgs.length / total_steps;
     for(i = 1; i < total_steps; i++)
@@ -135,7 +139,7 @@ function resultsStyle(feature) {
         opacity: 1,
         color: 'white',
         dashArray: '3',
-        fillColor: getLegendColorForValue(feature.properties.results.Razem * 100 / feature.properties.results.Total),
+        fillColor: getLegendColorForValue(feature.properties.results.razem * 100 / feature.properties.results.total),
         fillOpacity : 0.7
     };
 }
@@ -156,9 +160,6 @@ var boroughStyle = {
     "dashArray" : "5, 1",
     "weight" : 5
 }
-
-var boroughLayers = []
-var boroughFeatures = []
 
 function onEachFeatureInBorough(feature, layer) {
     boroughLayers.push(L.geoJSON(feature, { style : boroughStyle, pane : 'boroughPane' }));

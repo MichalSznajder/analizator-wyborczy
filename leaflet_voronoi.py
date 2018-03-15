@@ -185,18 +185,17 @@ def get_results():
     lines = lines[1:]
     lines = [line.split(';') for line in lines]
 
-    return { int(line[4]) : { "Razem" : int(line[88-1]), "Total" : int(line[27-1]) } for line in lines }
+    return { int(line[4]) : { "razem" : int(line[88-1]), "total" : int(line[27-1]) } for line in lines }
 
 def append_results_data(districts_json):
     results = get_results()
-    razem_min = int(min([val["Razem"] for (key, val) in results.items()]))
-    razem_max = int(max([val["Razem"] for (key, val) in results.items()]))
+    razem_min = int(min([val["razem"] for (key, val) in results.items()]))
+    razem_max = int(max([val["razem"] for (key, val) in results.items()]))
 
     for d in districts_json['features']:
         number = int(d['properties']['number'])
         d['properties']['results'] = results[number]
-        o = d['properties']['results']['Razem'] * 1.0 / (razem_max - razem_min)
-        d['properties']['results']['RazemOpacity'] = 0.1 + o * (1 - 0.1)
+        o = d['properties']['results']['razem'] * 1.0 / (razem_max - razem_min)
 
 polling_places = json.load(open('data/polling_places.json'))
 districts_json = create_districts(polling_places)
@@ -256,8 +255,8 @@ for (r, i) in zip(borough_ranges, range(len(borough_names))):
 
     properties = {}
     properties['results'] = {}
-    properties['results']['razem'] = sum([d['properties']['results']['Razem'] for d in districts])
-    properties['results']['total'] = sum([d['properties']['results']['Total'] for d in districts])
+    properties['results']['razem'] = sum([d['properties']['results']['razem'] for d in districts])
+    properties['results']['total'] = sum([d['properties']['results']['total'] for d in districts])
     properties['name'] = borough_names[i];
     properties['number'] = i+1;
     x.append(Feature(geometry=di, properties=properties))

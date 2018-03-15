@@ -25,7 +25,7 @@ function highlightDistrict(e) {
 }
 
 function resetDistrictHighlight(e) {
-    election_results.resetStyle(e.target);
+    election_results_layer.resetStyle(e.target);
 }
 
 var selectedDistrictNumber = -1;
@@ -77,15 +77,26 @@ function rgbToHex(color) {
 var razemColor = [135, 15, 87];
 
 
+var info_steps = []
+
+function getInfoStep(val) {
+    for (i = 0; i < info_steps.length; i++) {
+        if ((info_steps[i].begin <= val) && (val < info_steps[i].end)) {
+            return info_steps[i].color;
+        }
+    }
+
+    return rgbToHex(razemColor)
+}
 
 function resultsStyle(feature) {
     return {
-        fillColor: rgbToHex(razemColor),
         weight: 2,
-        opacity: 0.7,
-        color: '#57C49F',
+        opacity: 1,
+        color: 'white',
         dashArray: '3',
-        fillOpacity: feature.properties.results.RazemOpacity
+        fillColor: getInfoStep(feature.properties.results.Razem * 100 / feature.properties.results.Total),
+        fillOpacity : 0.7
     };
 }
 
@@ -99,15 +110,43 @@ function onEachFeatureInResults(feature, layer) {
     }
 }
 
-var election_results
+
+
+var election_results_layer = null;
+var election_results_json = null;
+
+var colors  = ['#800026', '#BD0026', '#E31A1C', '#FC4E2A', '#FD8D3C', '#FEB24C', '#FED976', '#FFEDA0'].reverse();
 
 $.getJSON("data/election_results.json", function(json) {
-    election_results = L.geoJSON(json, 
+    election_results_json = json;
+    var avgs = election_results_json.features.map(x => x.properties.results).map(x => x.Razem * 100 / x.Total).sort();  
+    var total_steps = colors.length;
+    var step = avgs.length / total_steps;
+    for(i = 1; i < total_steps; i++)
+    {
+        var info_step = {
+            step : i, 
+            begin : avgs[Math.round((i - 1 ) * step)],
+            end : avgs[Math.round(i * step)],
+            color : colors[i]
+        }
+        info_steps.push(info_step)
+    }
+
+    var info_step = {
+        step : total_steps, 
+        begin : info_steps[total_steps-2].end,
+        end : Infinity,
+        color : colors[total_steps - 1]
+    }
+    info_steps.push(info_step)
+
+    election_results_layer = L.geoJSON(json, 
         { 
             onEachFeature : onEachFeatureInResults, 
             style : resultsStyle
         });
-    election_results.addTo(mymap);
+    election_results_layer.addTo(mymap);
 });
 
 function onEachPointsFeature(feature, layer) {

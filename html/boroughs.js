@@ -1,4 +1,4 @@
-var mymap = null;
+var mainMap = null;
 var boroughs = null;
 
 function highlightBorough(e) {
@@ -59,21 +59,21 @@ function onEachFeatureInBoroughs(feature, layer) {
 }
 
 $(function() { 
-    mymap = L.map('mapid').setView([51.1043471,17.0189813], 13);
+    mainMap = L.map('mapid').setView([51.1043471,17.0189813], 13);
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWljaGFsc3puYWpkZXIiLCJhIjoiXy04UjRRYyJ9.p9-mkCAFeXfjZ5vzOhXdPw', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
         maxZoom: 21,
         id: 'mapbox.streets',
         accessToken: 'your.mapbox.access.token'
-    }).addTo(mymap);
+    }).addTo(mainMap);
 
 
     $.getJSON("data/boroughs.json", function(json) {
         boroughs = L.geoJSON(json, { 
             onEachFeature : onEachFeatureInBoroughs,
             style : boroughsStyle } )
-        .addTo(mymap);
+        .addTo(mainMap);
 
     }); 
 });

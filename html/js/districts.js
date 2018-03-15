@@ -83,9 +83,9 @@ function highlightDistrict(e) {
 
     layer.setStyle({
         weight: 5,
-        color: '#E7C49F',
+        color: '#57C49F',
         dashArray: '',
-        fillColor: "#E7C49F",
+        fillColor: "#57C49F",
         fillOpacity: 0.7
     });
 
@@ -123,7 +123,7 @@ function createLegend(election_results_json)
         // loop through our density intervals and generate a label with a colored square for each interval
         for (var i = 0; i < legend.length; i++) {
             div.innerHTML +=                
-                '<i style="background:' + legend[i].color + '"></i> ' +
+                '<div style="background:' + legend[i].color + '" data-step="' + i + '"></div> ' +
                 legend[i].begin.toFixed(2) + '% ' +
                 (isFinite(legend[i].end) ? '&ndash; ' + legend[i].end.toFixed(2) + '% ' : ' +') +
                 '<br />';
@@ -134,6 +134,36 @@ function createLegend(election_results_json)
     
     legendControl.addTo(mainMap);
 
+    $(".info div").mouseover(function(e) { 
+        var step = $(e.target).data().step;
+        var legendStep = legend[step];
+
+        Object.keys(election_results_layer._layers).forEach(function(key,index) {
+            layer = election_results_layer._layers[key];
+
+            var r = layer.feature.properties.results.razem * 100 / layer.feature.properties.results.total;
+            
+            if (legendStep.begin <= r && r < legendStep.end){
+                layer.setStyle({
+                    weight: 5,
+                    color: '#57C49F',
+                    dashArray: '',
+                    fillColor: "#57C49F",
+                    fillOpacity: 0.7
+                });
+
+                if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                    layer.bringToFront();
+                }                
+            }
+        });
+    })
+    .mouseout(function(e) { 
+        Object.keys(election_results_layer._layers).forEach(function(key,index) {
+            layer = election_results_layer._layers[key];
+            election_results_layer.resetStyle(layer);
+        });
+    });
 }
 
 function getLegendColorForValue(val) {

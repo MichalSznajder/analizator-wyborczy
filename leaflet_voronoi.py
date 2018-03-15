@@ -38,7 +38,7 @@ def write_points_file(points, file_name):
 
 
 border_json = json.load(open('data/wroclaw_border.json'))
-border = shape(border_json)
+border = shape(border_json).simplify(0.0001)
 
 def get_geometry_for_points(points):
     geometry = {}    

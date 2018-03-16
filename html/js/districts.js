@@ -54,7 +54,7 @@ function onDistrictClick(e) {
     $('#district_streets').text(e.target.feature.properties.streets);
 
     results = e.target.feature.properties.results;
-    result_val = results.Razem * 100 / results.Total;
+    result_val = results.razem * 100 / results.total;
     $('#district_result').text(result_val.toFixed(2) + " % (" + results.razem + " głosów z " + results.total + ")"); 
     selectedDistrictNumber = e.target.feature.properties.number;
 

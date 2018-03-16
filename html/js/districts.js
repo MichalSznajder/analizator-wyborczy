@@ -49,17 +49,22 @@ var selectedDistrictNumber = -1;
 var district_markers = []
 
 function onDistrictClick(e) {
-    $('#district_address').text(e.target.feature.properties.address);
-    $('#district_number').text(e.target.feature.properties.number);
-    $('#district_streets').text(e.target.feature.properties.streets);
+    var properties = e.target.feature.properties;
+    $('#district_address').text(properties.address);
+    $('#district_number').text(properties.number);
+    $('#district_streets').text(properties.streets);
 
-    results = e.target.feature.properties.results;
+    var pkw_link_id = 85171 + parseInt(properties.number);
+    var pkw_link = 'http://parlament2015.pkw.gov.pl/321_protokol_komisji_obwodowej/' + pkw_link_id +'/1#DataTables_Table_1_wrapper';
+    $('#pkw_link').attr('href', pkw_link);
+    
+    results = properties.results;
     result_val = results.razem * 100 / results.total;
     $('#district_result').text(result_val.toFixed(2) + " % (" + results.razem + " głosów z " + results.total + ")"); 
-    selectedDistrictNumber = e.target.feature.properties.number;
+    selectedDistrictNumber = properties.number;
 
     boroughLayers.forEach(function (e) { mainMap.removeLayer(e); });
-    var boroughId = e.target.feature.properties.borough_number-1;
+    var boroughId = properties.borough_number-1;
     mainMap.addLayer(boroughLayers[boroughId]);
     $('#borough_name').text(boroughFeatures[boroughId].properties.name);
 
@@ -69,7 +74,7 @@ function onDistrictClick(e) {
     var showDetails = $('#show_details_points').prop('checked');
     if (showDetails)
     {
-        var icons = e.target.feature.properties.icons;
+        var icons = properties.icons;
         district_markers.push(L.marker(icons.polling_point.coords.slice().reverse()).bindPopup(icons.polling_point.desc).setIcon(blueIcon));
         district_markers.push(L.marker(icons.helper_street.coords.slice().reverse()).bindPopup(icons.helper_street.desc).setIcon(greenIcon));
         district_markers.push(L.marker(icons.avg_point.coords.slice().reverse()).bindPopup(icons.avg_point.desc).setIcon(redIcon));

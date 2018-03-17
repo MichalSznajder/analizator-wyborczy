@@ -12,7 +12,7 @@ var boroughLayers = []
 var boroughFeatures = []
 
 var legendColors  = ['#800026', '#BD0026', '#E31A1C', '#FC4E2A', '#FD8D3C', '#FEB24C', '#FED976', '#FFEDA0'].reverse();
-var legend = []
+var legendTable = []
 
 $(function() { 
     mainMap.createPane('boroughPane');
@@ -33,13 +33,14 @@ $(function() {
     $.getJSON("data/election_results.json", function(json) {
         election_results_json = json;
     
-        createLegend(election_results_json);
+        legendTable = createLegendTable(election_results_json);
         election_results_layer = L.geoJSON(json, 
             { 
                 onEachFeature : onEachFeatureInResults, 
                 style : resultsStyle
             });
         election_results_layer.addTo(mainMap);
+        createLegendControl(legendTable)
 
         election_results_layer2 = L.geoJSON(json, 
             { 
@@ -76,8 +77,7 @@ function onEachFeatureInResults(feature, layer) {
             click: onDistrictClick,
             mouseover: highlightDistrict,
             mouseout: resetDistrictHighlight
-        })
-        layer
+        });
     }
 }
 
@@ -142,7 +142,7 @@ function resetDistrictHighlight(e, ctx) {
     layer._eventParents[parentLayerId].resetStyle(e.target);
 }
 
-function createLegend(election_results_json)
+function createLegendTable(election_results_json)
 {
     var avgs = election_results_json.features.map(x => x.properties.results).map(x => x.razem * 100 / x.total).sort();  
     var total_steps = legendColors.length;
@@ -155,21 +155,26 @@ function createLegend(election_results_json)
             end : avgs[Math.round((i+1) * step)],
             color : legendColors[i]
         }
-        legend.push(legend_item);
+        legendTable.push(legend_item);
     }
-    legend[0].begin = 0;
-    legend[legend.length-1].end = Infinity;
+    legendTable[0].begin = 0;
+    legendTable[legendTable.length-1].end = Infinity;
 
+    return legendTable;
+}
+
+function createLegendControl(legendTable)
+{
     var legendControl = L.control({position: 'bottomright'});
     legendControl.onAdd = function (map) {
     
         var div = L.DomUtil.create('div', 'info legend')
         // loop through our density intervals and generate a label with a colored square for each interval
-        for (var i = 0; i < legend.length; i++) {
+        for (var i = 0; i < legendTable.length; i++) {
             div.innerHTML +=                
-                '<div style="background:' + legend[i].color + '" data-step="' + i + '"></div> ' +
-                legend[i].begin.toFixed(2) + '% ' +
-                (isFinite(legend[i].end) ? '&ndash; ' + legend[i].end.toFixed(2) + '% ' : ' +') +
+                '<div style="background:' + legendTable[i].color + '" data-step="' + i + '"></div> ' +
+                legendTable[i].begin.toFixed(2) + '% ' +
+                (isFinite(legendTable[i].end) ? '&ndash; ' + legendTable[i].end.toFixed(2) + '% ' : ' +') +
                 '<br />';
         }
     
@@ -180,7 +185,7 @@ function createLegend(election_results_json)
 
     $(".info div").mouseover(function(e) { 
         var step = $(e.target).data().step;
-        var legendStep = legend[step];
+        var legendStep = legendTable[step];
 
         Object.keys(election_results_layer._layers).forEach(function(key,index) {
             layer = election_results_layer._layers[key];
@@ -211,9 +216,9 @@ function createLegend(election_results_json)
 }
 
 function getLegendColorForValue(val) {
-    for (i = 0; i < legend.length; i++) {
-        if ((legend[i].begin <= val) && (val < legend[i].end)) {
-            return legend[i].color;
+    for (i = 0; i < legendTable.length; i++) {
+        if ((legendTable[i].begin <= val) && (val < legendTable[i].end)) {
+            return legendTable[i].color;
         }
     }
 

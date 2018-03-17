@@ -40,10 +40,46 @@ $(function() {
                 style : resultsStyle
             });
         election_results_layer.addTo(mainMap);
+
+        election_results_layer2 = L.geoJSON(json, 
+            { 
+                onEachFeature : onEachFeatureInResults 
+                //style : resultsStyle
+            });
+
+        var baseLayers = { 
+            "Procentowy": election_results_layer,
+            "Bezwględny": election_results_layer2
+            };
+        
+        L.control
+            .layers(baseLayers, null, { "collapsed": false })
+            .addTo(mainMap);
     });
     
     setup_marker_checkboxes();
 });
+
+function resultsStyle(feature) {
+    return {
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillColor: getLegendColorForValue(feature.properties.results.razem * 100 / feature.properties.results.total),
+        fillOpacity : 0.7
+    };
+}
+function onEachFeatureInResults(feature, layer) {
+    if (feature.properties && feature.properties.address) {
+        layer.on({
+            click: onDistrictClick,
+            mouseover: highlightDistrict,
+            mouseout: resetDistrictHighlight
+        })
+        layer
+    }
+}
 
 var selectedDistrictNumber = -1;
 var district_markers = []
@@ -99,8 +135,11 @@ function highlightDistrict(e) {
     }
 }
 
-function resetDistrictHighlight(e) {
-    election_results_layer.resetStyle(e.target);
+function resetDistrictHighlight(e, ctx) {
+    var layer = e.target;
+    var parentLayerId = Object.keys(e.target._eventParents)[0]
+
+    layer._eventParents[parentLayerId].resetStyle(e.target);
 }
 
 function createLegend(election_results_json)
@@ -179,27 +218,6 @@ function getLegendColorForValue(val) {
     }
 
     return rgbToHex(razemColor)
-}
-
-function resultsStyle(feature) {
-    return {
-        weight: 2,
-        opacity: 1,
-        color: 'white',
-        dashArray: '3',
-        fillColor: getLegendColorForValue(feature.properties.results.razem * 100 / feature.properties.results.total),
-        fillOpacity : 0.7
-    };
-}
-
-function onEachFeatureInResults(feature, layer) {
-    if (feature.properties && feature.properties.address) {
-        layer.on({
-            click: onDistrictClick,
-            mouseover: highlightDistrict,
-            mouseout: resetDistrictHighlight
-        })
-    }
 }
 
 var boroughStyle = { 

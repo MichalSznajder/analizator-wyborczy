@@ -12,7 +12,6 @@ var boroughLayers = []
 var boroughFeatures = []
 
 var legendColors  = ['#800026', '#BD0026', '#E31A1C', '#FC4E2A', '#FD8D3C', '#FEB24C', '#FED976', '#FFEDA0'].reverse();
-var legendTable = []
 
 $(function() { 
     mainMap.createPane('boroughPane');
@@ -33,11 +32,11 @@ $(function() {
     $.getJSON("data/election_results.json", function(json) {
         election_results_json = json;
     
-        legendTable = createLegendTable(election_results_json);
+        var legendTable = createLegendTable(election_results_json);
         election_results_layer = L.geoJSON(json, 
             { 
                 onEachFeature : onEachFeatureInResults, 
-                style : resultsStyle
+                style : resultsStyle(legendTable)
             });
         election_results_layer.addTo(mainMap);
         createLegendControl(legendTable)
@@ -61,15 +60,18 @@ $(function() {
     setup_marker_checkboxes();
 });
 
-function resultsStyle(feature) {
-    return {
-        weight: 2,
-        opacity: 1,
-        color: 'white',
-        dashArray: '3',
-        fillColor: getLegendColorForValue(feature.properties.results.razem * 100 / feature.properties.results.total),
-        fillOpacity : 0.7
-    };
+function resultsStyle(legendTable) {
+
+    return function(feature) {
+        return {
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillColor: getLegendColorForValue(feature.properties.results.razem * 100 / feature.properties.results.total, legendTable),
+            fillOpacity : 0.7
+        };    
+    }
 }
 function onEachFeatureInResults(feature, layer) {
     if (feature.properties && feature.properties.address) {
@@ -147,6 +149,7 @@ function createLegendTable(election_results_json)
     var avgs = election_results_json.features.map(x => x.properties.results).map(x => x.razem * 100 / x.total).sort();  
     var total_steps = legendColors.length;
     var step = avgs.length / total_steps;
+    var legendTable = [];
     for(i = 0; i < total_steps; i++)
     {
         var legend_item = {
@@ -215,10 +218,10 @@ function createLegendControl(legendTable)
     });
 }
 
-function getLegendColorForValue(val) {
-    for (i = 0; i < legendTable.length; i++) {
-        if ((legendTable[i].begin <= val) && (val < legendTable[i].end)) {
-            return legendTable[i].color;
+function getLegendColorForValue(val, table) {
+    for (i = 0; i < table.length; i++) {
+        if ((table[i].begin <= val) && (val < table[i].end)) {
+            return table[i].color;
         }
     }
 

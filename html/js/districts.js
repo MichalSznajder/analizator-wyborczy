@@ -5,7 +5,6 @@ var greenIcon = L.icon({ iconUrl: 'img/marker-icon-green.png'});
 var redIcon = L.icon({ iconUrl: 'img/marker-icon-red.png'});
 var razemColor = [135, 15, 87];
 
-var election_results_layer = null;
 var election_results_json = null;
 
 var boroughLayers = []
@@ -32,20 +31,22 @@ $(function() {
     $.getJSON("data/election_results.json", function(json) {
         election_results_json = json;
     
-        var legendTable = createLegendTable(election_results_json);
-        election_results_layer = L.geoJSON(json, 
+        var percentageLegendTable = createPercentageLegendTable(election_results_json);
+        var election_results_layer = L.geoJSON(json, 
             { 
                 onEachFeature : onEachFeatureInResults, 
-                style : resultsStyle(legendTable)
+                style : resultsStyle(percentageLegendTable, results => results.razem * 100 / results.total)
             });
         election_results_layer.addTo(mainMap);
-        createLegendControl(legendTable)
+        var percentageLegend = createLegendControl(percentageLegendTable, election_results_layer, results => results.razem * 100 / results.total, '%');
 
+        var absoluteLegendTable = createAbsoluteLegendTable(election_results_json);
         election_results_layer2 = L.geoJSON(json, 
             { 
-                onEachFeature : onEachFeatureInResults 
-                //style : resultsStyle
+                onEachFeature : onEachFeatureInResults, 
+                style : resultsStyle(absoluteLegendTable, results => results.razem)
             });
+        var absoluteLegend = createLegendControl(absoluteLegendTable, election_results_layer, results => results.razem, '');
 
         var baseLayers = { 
             "Procentowy": election_results_layer,
@@ -55,12 +56,22 @@ $(function() {
         L.control
             .layers(baseLayers, null, { "collapsed": false })
             .addTo(mainMap);
-    });
+
+        percentageLegend.addTo(mainMap);
+        mainMap.on('baselayerchange', function (eventLayer) {
+            if (eventLayer.name === 'Procentowy') {
+                mainMap.removeControl(absoluteLegend);
+                mainMap.addControl(percentageLegend);
+            } else { 
+                mainMap.addControl(absoluteLegend);
+                mainMap.removeControl(percentageLegend);
+            }});
+        });
     
     setup_marker_checkboxes();
 });
 
-function resultsStyle(legendTable) {
+function resultsStyle(legendTable, selector) {
 
     return function(feature) {
         return {
@@ -68,7 +79,7 @@ function resultsStyle(legendTable) {
             opacity: 1,
             color: 'white',
             dashArray: '3',
-            fillColor: getLegendColorForValue(feature.properties.results.razem * 100 / feature.properties.results.total, legendTable),
+            fillColor: getLegendColorForValue(selector(feature.properties.results), legendTable),
             fillOpacity : 0.7
         };    
     }
@@ -144,7 +155,7 @@ function resetDistrictHighlight(e, ctx) {
     layer._eventParents[parentLayerId].resetStyle(e.target);
 }
 
-function createLegendTable(election_results_json)
+function createPercentageLegendTable(election_results_json)
 {
     var avgs = election_results_json.features.map(x => x.properties.results).map(x => x.razem * 100 / x.total).sort();  
     var total_steps = legendColors.length;
@@ -166,34 +177,39 @@ function createLegendTable(election_results_json)
     return legendTable;
 }
 
-function createLegendControl(legendTable)
+function createAbsoluteLegendTable(election_results_json)
 {
-    var legendControl = L.control({position: 'bottomright'});
-    legendControl.onAdd = function (map) {
-    
-        var div = L.DomUtil.create('div', 'info legend')
-        // loop through our density intervals and generate a label with a colored square for each interval
-        for (var i = 0; i < legendTable.length; i++) {
-            div.innerHTML +=                
-                '<div style="background:' + legendTable[i].color + '" data-step="' + i + '"></div> ' +
-                legendTable[i].begin.toFixed(2) + '% ' +
-                (isFinite(legendTable[i].end) ? '&ndash; ' + legendTable[i].end.toFixed(2) + '% ' : ' +') +
-                '<br />';
+    var totals = election_results_json.features.map(x => x.properties.results.razem).sort();  
+    var total_steps = legendColors.length;
+    var step = totals.length / total_steps;
+    var legendTable = [];
+    for(i = 0; i < total_steps; i++)
+    {
+        var legend_item = {
+            step : i, 
+            begin : totals[Math.round(i * step)],
+            end : totals[Math.round((i+1) * step)],
+            color : legendColors[i]
         }
-    
-        return div;
-    };
-    
-    legendControl.addTo(mainMap);
+        legendTable.push(legend_item);
+    }
+    legendTable[0].begin = 0;
+    legendTable[legendTable.length-1].end = Infinity;
 
-    $(".info div").mouseover(function(e) { 
+    return legendTable;
+}
+
+function createLegendControl(legendTable, baseLayer, selector, specialMark)
+{
+    specialMark = specialMark || ' ';
+    var mouseover = function(e) { 
         var step = $(e.target).data().step;
         var legendStep = legendTable[step];
 
-        Object.keys(election_results_layer._layers).forEach(function(key,index) {
-            layer = election_results_layer._layers[key];
+        Object.keys(baseLayer._layers).forEach(function(key, index) {
+            var layer = baseLayer._layers[key];
 
-            var r = layer.feature.properties.results.razem * 100 / layer.feature.properties.results.total;
+            var r = selector(layer.feature.properties.results);
             
             if (legendStep.begin <= r && r < legendStep.end){
                 layer.setStyle({
@@ -209,13 +225,40 @@ function createLegendControl(legendTable)
                 }                
             }
         });
-    })
-    .mouseout(function(e) { 
-        Object.keys(election_results_layer._layers).forEach(function(key,index) {
-            layer = election_results_layer._layers[key];
-            election_results_layer.resetStyle(layer);
+    };
+    var mouseout = function(e) { 
+        Object.keys(baseLayer._layers).forEach(function(key,index) {
+            layer = baseLayer._layers[key];
+            baseLayer.resetStyle(layer);
         });
-    });
+    };
+
+    var legendControl = L.control({position: 'bottomright'});
+    legendControl.onAdd = function (map) {
+        var legend = L.DomUtil.create('div', 'info legend')
+        // loop through our density intervals and generate a label with a colored square for each interval
+        for (var i = 0; i < legendTable.length; i++) {
+            var div = L.DomUtil.create('div', 'zzz', legend);
+            div.style = 'background:' + legendTable[i].color + ';';
+            div.dataset.step = i;
+
+            L.DomEvent
+                .addListener(div, "mouseover", mouseover)
+                .addListener(div, "mouseout", mouseout);
+       
+            var text =                
+                legendTable[i].begin.toFixed(2) + specialMark + ' ' +
+                (isFinite(legendTable[i].end) ? '– ' + legendTable[i].end.toFixed(2) + specialMark + ' ' : ' +');
+            var text = document.createTextNode(text); 
+            legend.appendChild(text);
+
+            var br = L.DomUtil.create('br', '', legend);
+        }
+    
+        return legend;
+    };
+    
+    return legendControl;
 }
 
 function getLegendColorForValue(val, table) {
